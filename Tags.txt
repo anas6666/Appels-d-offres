@@ -1,0 +1,31 @@
+CATEGORIES = {
+    # --- BTP & INFRASTRUCTURES ---
+    "Constructions & Gros Œuvre":["construction", "gros oeuvre", "bâtiment", "démolition", "surélévation", "achèvement"],
+    "Génie Civil & Infrastructures":["route", "piste", "génie civil", "voirie", "assainissement", "pont", "forage", "terrassement"],
+    "Aménagement & Finition":["aménagement", "menuiserie", "peinture", "aluminium", "revêtement", "étanchéité", "espaces verts", "jardinage"],
+    "Électricité & Plomberie":["électricité", "éclairage public", "plomberie", "climatisation", "cvc", "ascenseur", "transformateur"],
+
+    # --- FACILITY MANAGEMENT ---
+    "Nettoyage & Entretien":["nettoyage", "entretien", "hygiène", "dératisation", "désinsectisation", "désinfection", "balayage", "déchets"],
+    "Gardiennage & Sécurité":["gardiennage", "sécurité", "surveillance", "vidéosurveillance", "incendie", "extincteurs", "alarme"],
+    "Transport & Logistique":["transport", "logistique", "location de véhicules", "fret", "déménagement", "carburant"],
+
+    # --- INTELLECTUAL SERVICES & HR ---
+    "Recrutement & Intérim":["recrutement", "intérim", "travail temporaire", "ressources humaines", "personnel", "mise à disposition"],
+    "Consulting & Audit":["audit", "étude", "conseil", "consulting", "accompagnement", "certification", "iso", "assistance technique", "maîtrise d'oeuvre"],
+    "Formation & Coaching":["formation", "renforcement des capacités", "coaching", "séminaire", "ingénierie de formation"],
+
+    # --- IT & TECH ---
+    "IT Matériel & Réseau":["matériel informatique", "serveur", "ordinateur", "câblage", "réseau", "télécommunication", "ondulateur", "imprimante"],
+    "IT Logiciel & Digital":["logiciel", "application", "développement", "erp", "site web", "système d'information", "hébergement", "cloud", "licence"],
+    "Archivage & Numérisation":["archivage", "numérisation", "saisie", "gestion électronique des documents", "ged", "traitement de documents"],
+
+    # --- SUPPLIES & OTHERS ---
+    "Fournitures de Bureau & Impression":["fourniture de bureau", "papeterie", "mobilier", "impression", "reprographie", "fournitures scolaires", "cartouches"],
+    "Matériel Médical & Laboratoire":["médical", "laboratoire", "réactifs", "médicaments", "biomédical", "clinique", "hospitalier"],
+    "Agroalimentaire & Restauration":["restauration", "denrées alimentaires", "repas", "traiteur", "viande", "lait", "cantine"],
+    "Événementiel & Communication":["événementiel", "organisation", "stand", "communication", "audiovisuel", "publicité", "goodies"],
+    
+    # --- TANMIA / SOCIAL ---
+    "Développement Social & ONG":["projet social", "subvention", "ong", "société civile", "association", "coopérative", "femmes", "jeunesse", "inclusion"]
+}

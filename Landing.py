@@ -647,22 +647,14 @@ with st.form("lead_gen_form", clear_on_submit=False):
 
     q_cps_ai = st.radio("Seriez-vous intéressé par une IA qui lit le CPS à votre place et extrait le Dossier Technique ?",[
         "Pas intéressé pour l'instant",
-        "Oui, si c'est gratuit ou en essai",
-        "Oui, prêt à payer un abonnement mensuel",
-        "Oui, et je voudrais être contacté pour une démo",
+        "Oui",
     ], index=None)
 
-    q_pilot = st.radio("Seriez-vous ouvert à tester une automatisation sur-mesure (Proof of Concept) gratuitement ?",[
+    q_pilot = st.radio("Seriez-vous ouvert à tester une automatisation sur-mesure (Proof of Concept) ?",[
         "Oui, absolument",
-        "Peut-être — à voir selon la proposition",
         "Non, pas pour le moment",
     ], index=None)
 
-    q_source = st.selectbox("Comment avez-vous entendu parler de ce service ?",[
-        "LinkedIn", "Recommandation d'un contact",
-        "Google / Recherche web", "Email reçu",
-        "Événement ou salon professionnel", "Autre",
-    ], index=None, placeholder="Sélectionnez...")
 
     q_comment = st.text_area(
         "Un commentaire libre, une question, ou une idée d'automatisation que vous souhaitez explorer ? (optionnel)",

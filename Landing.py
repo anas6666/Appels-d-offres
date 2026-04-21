@@ -5,7 +5,7 @@ from datetime import datetime
 
 # --- 1. PAGE CONFIG ---
 st.set_page_config(
-    page_title="Portail AO | TargetUp Intelligence",
+    page_title="Portail AO",
     page_icon="🎯",
     layout="wide"
 )
@@ -414,7 +414,7 @@ with st.form("lead_gen_form", clear_on_submit=False):
 
     col1, col2 = st.columns(2)
     with col1:
-        company_name     = st.text_input("Raison sociale *", placeholder="Ex: TargetUp SARL")
+        company_name     = st.text_input("Raison sociale *", placeholder="")
         secteur_entreprise = st.selectbox("Secteur d'activité principal *", SECTEURS_ENTREPRISE, index=None, placeholder="Sélectionnez...")
         email            = st.text_input("Email *", placeholder="")
         phone            = st.text_input("Téléphone / WhatsApp *", placeholder="")
@@ -729,6 +729,6 @@ if submitted:
 st.markdown("""
 <div class="footer-note">
     Données traitées de façon confidentielle — aucune revente à des tiers.<br>
-    Un service <strong>TargetUp Group</strong> · Maroc 🇲🇦
+    <strong>Morocco · Maroc</strong>
 </div>
 """, unsafe_allow_html=True)

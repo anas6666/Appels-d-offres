@@ -452,6 +452,14 @@ with st.form("lead_gen_form", clear_on_submit=False):
     ], index=None, placeholder="Sélectionnez...")
 
     # ── BLOCK B : AO TARGETING ──
+    st.markdown("""
+    <div class="section-divider">
+        <div class="section-divider-line"></div>
+        <div class="section-divider-label">B · Appels d'offres</div>
+        <div class="section-divider-line"></div>
+    </div>
+    """, unsafe_allow_html=True)
+    
     with st.container():
         st.markdown('<span class="ao-targeting-marker"></span>', unsafe_allow_html=True)
     
@@ -553,7 +561,7 @@ with st.form("lead_gen_form", clear_on_submit=False):
     st.markdown("""
     <div class="section-divider">
         <div class="section-divider-line"></div>
-        <div class="section-divider-label">D · Points de friction & opportunités</div>
+        <div class="section-divider-label">D · Points de friction</div>
         <div class="section-divider-line"></div>
     </div>
     """, unsafe_allow_html=True)

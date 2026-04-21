@@ -7,7 +7,7 @@ from datetime import datetime
 st.set_page_config(
     page_title="Portail AO | TargetUp Intelligence",
     page_icon="🎯",
-    layout="centered"
+    layout="wide"
 )
 
 # --- 2. CSS ---
@@ -34,10 +34,21 @@ st.markdown("""
         font-family: 'DM Sans', sans-serif !important;
     }
 
+    /* Force centered, fixed-width column */
+    .main > div {
+        display: flex;
+        justify-content: center;
+    }
+
     .main .block-container {
-        max-width: 780px;
-        padding: 3rem 2rem 6rem;
+        width: 100% !important;
+        max-width: 680px !important;
+        min-width: 0 !important;
+        padding: 2.5rem 1.5rem 6rem !important;
         animation: pageIn 0.9s cubic-bezier(0.16,1,0.3,1) both;
+        box-sizing: border-box;
+        margin-left: auto !important;
+        margin-right: auto !important;
     }
 
     @keyframes pageIn {
@@ -64,12 +75,13 @@ st.markdown("""
 
     .hero-title {
         font-family: 'Syne', sans-serif !important;
-        font-size: clamp(2rem, 5vw, 3.1rem) !important;
+        font-size: 2.6rem !important;
         font-weight: 800 !important;
-        line-height: 1.1 !important;
-        letter-spacing: -0.02em !important;
+        line-height: 1.08 !important;
+        letter-spacing: -0.025em !important;
         color: #f1f1f8 !important;
         margin-bottom: 1rem !important;
+        max-width: 600px;
     }
 
     .hero-title span {
@@ -83,7 +95,7 @@ st.markdown("""
         font-size: 1.05rem;
         color: var(--text-soft);
         line-height: 1.65;
-        max-width: 560px;
+        max-width: 100%;
         margin-bottom: 2rem;
     }
 

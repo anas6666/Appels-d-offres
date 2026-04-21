@@ -474,7 +474,7 @@ with st.form("lead_gen_form", clear_on_submit=False):
         st.markdown('<span class="ao-targeting-marker"></span>', unsafe_allow_html=True)
     
         st.markdown("""
-            <div class="ao-box-title">🎯 Ciblage de vos Appels d'Offres</div>
+            <div class="ao-box-title">Ciblage de vos Appels d'Offres</div>
             <div class="ao-box-desc">Sélectionnez un ou plusieurs secteurs. Vous recevrez uniquement les AO correspondants, chaque matin par email.</div>
         """, unsafe_allow_html=True)
     

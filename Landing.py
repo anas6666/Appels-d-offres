@@ -14,6 +14,7 @@ st.set_page_config(
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
     :root {
         --ink: #0a0a0f;
         --ink2: #14141e;
@@ -33,7 +34,6 @@ st.markdown("""
         font-family: 'DM Sans', sans-serif !important;
     }
 
-    /* Force centered, fixed-width column */
     .main > div {
         display: flex;
         justify-content: center;
@@ -75,22 +75,21 @@ st.markdown("""
     .hero-title {
         font-family: 'Inter', sans-serif !important;
         font-size: 2.6rem !important;
-        font-weight: 700 !important;            /* ← 700 instead of 800 */
-        line-height: 1.2 !important;            /* ← slightly more breathing room */
-        letter-spacing: -0.01em !important;     /* ← reduce negative tracking */
+        font-weight: 700 !important;
+        line-height: 1.2 !important;
+        letter-spacing: -0.01em !important;
         color: #f1f1f8 !important;
         margin-bottom: 1rem !important;
         max-width: 600px;
-        text-rendering: optimizeLegibility;     /* improves rendering on some browsers */
+        text-rendering: optimizeLegibility;
     }
-    
-    
+
     .hero-title span {
         background: linear-gradient(90deg, #e63153, #f97316);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        font-weight: 700 !important;            /* match parent weight */
+        font-weight: 700 !important;
     }
 
     .hero-sub {
@@ -112,7 +111,7 @@ st.markdown("""
         flex-direction: column;
     }
     .stat-num {
-        font-family:'Inter', sans-serif !important;
+        font-family: 'Inter', sans-serif !important;
         font-size: 1.9rem;
         font-weight: 800;
         background: linear-gradient(90deg, #e63153, #f97316);
@@ -150,19 +149,19 @@ st.markdown("""
         white-space: nowrap;
     }
 
-    /* ── AO HIGHLIGHT ── */
-    .ao-box {
+    /* ── AO TARGETING BOX (merged) ── */
+    .ao-targeting-wrapper {
         background: linear-gradient(135deg, rgba(230,49,83,0.08) 0%, rgba(249,115,22,0.05) 100%);
         border: 1px solid rgba(230,49,83,0.2);
         border-left: 3px solid var(--accent);
-        padding: 22px 26px;
         border-radius: 10px;
-        margin: 1.5rem 0;
+        padding: 22px 26px 26px 26px;
+        margin: 1.5rem 0 2rem 0;
         position: relative;
         overflow: hidden;
         transition: box-shadow 0.3s ease, transform 0.3s ease;
     }
-    .ao-box::before {
+    .ao-targeting-wrapper::before {
         content: '';
         position: absolute;
         top: -30px; right: -30px;
@@ -170,22 +169,31 @@ st.markdown("""
         background: radial-gradient(circle, rgba(230,49,83,0.15), transparent 70%);
         pointer-events: none;
     }
-    .ao-box:hover {
+    .ao-targeting-wrapper:hover {
         box-shadow: 0 8px 32px rgba(230,49,83,0.12);
         transform: translateY(-2px);
     }
-    .ao-box h4 {
+    .ao-targeting-wrapper h4 {
         font-family: 'Syne', sans-serif;
         font-size: 1rem;
         font-weight: 700;
         color: #f87196;
         margin: 0 0 6px;
     }
-    .ao-box p {
+    .ao-targeting-wrapper p {
         font-size: 0.88rem;
         color: var(--text-soft);
-        margin: 0;
+        margin: 0 0 18px 0;
         line-height: 1.6;
+    }
+    /* Remove Streamlit default container gaps inside the wrapper */
+    .ao-targeting-wrapper .stMultiSelect {
+        margin-bottom: 0;
+    }
+    .ao-targeting-wrapper .stMultiSelect [data-baseweb="select"] {
+        background: var(--surface) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 8px !important;
     }
 
     /* ── INPUTS ── */
@@ -207,7 +215,6 @@ st.markdown("""
         box-shadow: 0 0 0 3px rgba(230,49,83,0.1) !important;
     }
 
-    /* Labels */
     label, .stRadio > label, .stCheckbox > label {
         color: var(--text-soft) !important;
         font-size: 0.85rem !important;
@@ -215,7 +222,6 @@ st.markdown("""
         letter-spacing: 0.01em !important;
     }
 
-    /* Radio buttons */
     .stRadio > div {
         gap: 6px !important;
     }
@@ -234,7 +240,6 @@ st.markdown("""
         background: rgba(230,49,83,0.05) !important;
     }
 
-    /* ── SUBMIT BUTTON ── */
     .stFormSubmitButton > button, .stButton > button {
         background: linear-gradient(135deg, #e63153 0%, #c91d41 100%) !important;
         color: white !important;
@@ -257,14 +262,12 @@ st.markdown("""
         background: linear-gradient(135deg, #f0365a 0%, #d42246 100%) !important;
     }
 
-    /* ── SUCCESS / ERROR ── */
     .stAlert {
         border-radius: 10px !important;
         border-left-width: 3px !important;
         font-family: 'DM Sans', sans-serif !important;
     }
 
-    /* ── FOOTER ── */
     .footer-note {
         text-align: center;
         font-size: 0.78rem;
@@ -274,7 +277,6 @@ st.markdown("""
         border-top: 1px solid var(--border);
     }
 
-    /* ── Streamlit chrome cleanup ── */
     #MainMenu, footer, header { visibility: hidden !important; }
     .stDeployButton { display: none !important; }
 </style>
@@ -320,11 +322,6 @@ MOROCCAN_CITIES = [
     "Temara", "Ain Sebaa", "Hay Hassani", "Autre",
 ]
 
-FORBIDDEN_NAMES = [
-    "n/a", "na", "anonyme", "confidentiel", "secret", "aucun", "rien",
-    "test", "freelance", "particulier", "self employed", "independant",
-    "indépendant", "x", "xxx", "-", "none", "null",
-]
 SECTEURS_ENTREPRISE = sorted([
     "Agriculture & Agroalimentaire",
     "Automobile & Pièces détachées",
@@ -333,9 +330,8 @@ SECTEURS_ENTREPRISE = sorted([
     "Chimie & Pharmacie",
     "Commerce & Distribution",
     "Conseil & Études",
-    "Ressources Humaines & Recrutement",
-    "Education & Formation",
-    "Energie & Environnement",
+    "Éducation & Formation",
+    "Énergie & Environnement",
     "Hôtellerie & Restauration",
     "Immobilier & Promotion",
     "Industrie Manufacturière",
@@ -348,8 +344,15 @@ SECTEURS_ENTREPRISE = sorted([
     "Textile & Habillement",
     "Tourisme & Loisirs",
 ])
+
+FORBIDDEN_NAMES = [
+    "n/a", "na", "anonyme", "confidentiel", "secret", "aucun", "rien",
+    "test", "freelance", "particulier", "self employed", "independant",
+    "indépendant", "x", "xxx", "-", "none", "null",
+]
+
 # --- 5. HERO ---
-st.markdown('<div class="hero-badge">🎯 Accès gratuit</div>', unsafe_allow_html=True)
+st.markdown('<div class="hero-badge">🎯 Accès gratuit · B2B uniquement</div>', unsafe_allow_html=True)
 st.markdown("""
 <div class="hero-title">
     Recevez vos Appels d'Offres<br><span>filtrés & automatisés.</span>
@@ -420,21 +423,20 @@ with st.form("lead_gen_form", clear_on_submit=False):
         "Autre",
     ])
 
-    # ── BLOCK B : AO TARGETING ──
-    with st.container():
-        st.markdown("""
-        <div class="ao-box">
-            <h4>🎯 Ciblage de vos Appels d'Offres</h4>
-            <p>Sélectionnez un ou plusieurs secteurs. Vous recevrez uniquement les AO correspondants, chaque matin par email.</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-        tags = st.multiselect(
-            "Secteurs d'Appels d'Offres souhaités *",
-            options=AO_CATEGORIES,
-            label_visibility="collapsed",
-            placeholder="Choisissez vos secteurs cibles…"
-        )
+    # ── BLOCK B : AO TARGETING (merged box) ──
+    st.markdown('<div class="ao-targeting-wrapper">', unsafe_allow_html=True)
+    st.markdown("""
+        <h4>🎯 Ciblage de vos Appels d'Offres</h4>
+        <p>Sélectionnez un ou plusieurs secteurs. Vous recevrez uniquement les AO correspondants, chaque matin par email.</p>
+    """, unsafe_allow_html=True)
+    tags = st.multiselect(
+        "Secteurs d'Appels d'Offres souhaités *",
+        options=AO_CATEGORIES,
+        label_visibility="collapsed",
+        placeholder="Choisissez vos secteurs cibles…"
+    )
+    st.markdown('</div>', unsafe_allow_html=True)
+
     # ── BLOCK C : CURRENT AO PROCESS ──
     st.markdown("""
     <div class="section-divider">
@@ -675,7 +677,6 @@ if submitted:
             with st.spinner("Enregistrement en cours…"):
                 current_time       = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 secteurs_ao_str    = ", ".join(tags)
-                regions_str        = ", ".join(ao_regions) if ao_regions else "Toutes régions"
                 ai_tools_str       = ", ".join(q_ai_tools) if q_ai_tools else "Aucun"
                 digital_tools_str  = ", ".join(q_digital_tools) if q_digital_tools else "Aucun"
                 site_web           = website if website else "Non renseigné"
@@ -685,7 +686,7 @@ if submitted:
                     current_time, company_name, secteur_entreprise, ca_range,
                     age_entreprise, effectif, role_respondant,
                     site_web, city, email, phone,
-                    secteurs_ao_str, regions_str,
+                    secteurs_ao_str,
                     # AO Process
                     q_ao_freq, q_ao_management, q_ao_time, q_ao_pain, q_ao_win_rate,
                     # AI Maturity

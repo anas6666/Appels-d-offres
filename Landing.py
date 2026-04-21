@@ -39,10 +39,9 @@ st.markdown("""
         justify-content: center;
     }
 
-    /* Élargissement du conteneur pour le layout Hero (Texte / Visuel) */
     .main .block-container {
         width: 100% !important;
-        max-width: 1100px !important; 
+        max-width: 680px !important;
         min-width: 0 !important;
         padding: 2.5rem 1.5rem 6rem !important;
         animation: pageIn 0.9s cubic-bezier(0.16,1,0.3,1) both;
@@ -56,40 +55,7 @@ st.markdown("""
         to   { opacity: 1; transform: translateY(0); }
     }
 
-    /* ── HERO SPLIT LAYOUT ── */
-    .hero-wrapper {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 4rem;
-        margin-bottom: 4rem;
-        padding-top: 1rem;
-    }
-    
-    .hero-content {
-        flex: 1.1;
-        max-width: 600px;
-    }
-    
-    .hero-visual {
-        flex: 0.9;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        min-height: 380px;
-    }
-
-    @media (max-width: 850px) {
-        .hero-wrapper {
-            flex-direction: column;
-            text-align: left;
-        }
-        .hero-visual {
-            display: none; /* Cache l'animation sur mobile pour gagner de la place */
-        }
-    }
-
+    /* ── HERO ── */
     .hero-badge {
         display: inline-flex;
         align-items: center;
@@ -108,55 +74,37 @@ st.markdown("""
 
     .hero-title {
         font-family: 'Inter', sans-serif !important;
-        font-size: 2.4rem !important;
-        font-weight: 800 !important;
-        line-height: 1.15 !important;
+        font-size: 2.6rem !important;
+        font-weight: 700 !important;
+        line-height: 1.2 !important;
         letter-spacing: -0.01em !important;
         color: #f1f1f8 !important;
         margin-bottom: 1rem !important;
+        max-width: 600px;
         text-rendering: optimizeLegibility;
     }
 
     .hero-title span {
-        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        background: linear-gradient(90deg, #e63153, #f97316);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+        font-weight: 700 !important;
     }
 
     .hero-sub {
-        font-size: 0.95rem;
+        font-size: 1.05rem;
         color: var(--text-soft);
-        line-height: 1.6;
+        line-height: 1.65;
+        max-width: 100%;
         margin-bottom: 2rem;
-    }
-    
-    .hero-sub ul {
-        list-style: none;
-        padding-left: 0;
-        margin-top: 15px;
-    }
-    .hero-sub ul li {
-        position: relative;
-        padding-left: 22px;
-        margin-bottom: 8px;
-        font-size: 0.9rem;
-    }
-    .hero-sub ul li::before {
-        content: '✓';
-        position: absolute;
-        left: 0;
-        color: var(--accent);
-        font-weight: 800;
     }
 
     .stat-row {
         display: flex;
         gap: 2rem;
+        margin: 1.8rem 0 2.5rem;
         flex-wrap: wrap;
-        border-top: 1px solid var(--border);
-        padding-top: 1.5rem;
-        margin-top: 1.5rem;
     }
     .stat-item {
         display: flex;
@@ -164,81 +112,20 @@ st.markdown("""
     }
     .stat-num {
         font-family: 'Inter', sans-serif !important;
-        font-size: 1.6rem;
+        font-size: 1.9rem;
         font-weight: 800;
-        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        background: linear-gradient(90deg, #e63153, #f97316);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
         line-height: 1;
     }
     .stat-label {
-        font-size: 0.72rem;
-        color: var(--muted);
-        margin-top: 5px;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        font-weight: 600;
+        font-size: 0.78rem;
+        color: var(--text-soft);
+        margin-top: 3px;
+        letter-spacing: 0.03em;
     }
-
-    /* ── ANIMATED AI NETWORK (Le visuel de droite) ── */
-    .ai-network {
-        position: relative;
-        width: 320px;
-        height: 320px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .orbit {
-        position: absolute;
-        border-radius: 50%;
-        border: 1px solid rgba(255,255,255,0.05);
-        animation: spin linear infinite;
-    }
-    .orbit::before {
-        content: '';
-        position: absolute;
-        top: -4px;
-        left: 50%;
-        width: 8px;
-        height: 8px;
-        background: var(--accent);
-        border-radius: 50%;
-        box-shadow: 0 0 12px var(--accent);
-    }
-    .orbit-1 { width: 100%; height: 100%; animation-duration: 25s; border: 1px dashed rgba(230,49,83,0.3); }
-    .orbit-2 { width: 70%; height: 70%; animation-duration: 15s; animation-direction: reverse; }
-    .orbit-2::before { background: var(--accent2); box-shadow: 0 0 12px var(--accent2); top: 50%; left: -4px; }
-    .orbit-3 { width: 40%; height: 40%; animation-duration: 10s; border: 1px solid rgba(249,115,22,0.2); }
-    .orbit-3::before { display: none; }
-    
-    .core-node {
-        width: 50px;
-        height: 50px;
-        background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
-        border-radius: 50%;
-        box-shadow: 0 0 40px rgba(230,49,83,0.6);
-        animation: pulse 2s ease-in-out infinite alternate;
-        z-index: 2;
-    }
-
-    .network-lines {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        z-index: 1;
-    }
-    .network-lines line {
-        stroke: rgba(230,49,83,0.3);
-        stroke-width: 1.5;
-        stroke-dasharray: 4;
-        animation: dash 30s linear infinite;
-    }
-
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-    @keyframes pulse { 100% { transform: scale(1.15); box-shadow: 0 0 60px rgba(249,115,22,0.7); } }
-    @keyframes dash { to { stroke-dashoffset: 1000; } }
 
     /* ── DIVIDER ── */
     .section-divider {
@@ -263,7 +150,9 @@ st.markdown("""
     }
 
     /* ── AO TARGETING BOX ── */
-    div.element-container:has(.ao-targeting-marker) { display: none !important; }
+    div.element-container:has(.ao-targeting-marker) {
+        display: none !important;
+    }
 
     div[data-testid="stVerticalBlock"]:has(.ao-targeting-marker):not(:has(div[data-testid="stVerticalBlock"] .ao-targeting-marker)) {
         background: linear-gradient(135deg, #2a0d14 0%, #1a0a0f 100%) !important;
@@ -278,63 +167,146 @@ st.markdown("""
     }
     
     div[data-testid="stVerticalBlock"]:has(.ao-targeting-marker):not(:has(div[data-testid="stVerticalBlock"] .ao-targeting-marker))::before {
-        content: ''; position: absolute; inset: 0;
-        background: radial-gradient(circle at 20% 0%, rgba(230,49,83,0.25), transparent 60%); pointer-events: none;
-    }
-    div[data-testid="stVerticalBlock"]:has(.ao-targeting-marker):not(:has(div[data-testid="stVerticalBlock"] .ao-targeting-marker))::after {
-        content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-        background: radial-gradient(circle, rgba(230,49,83,0.08), transparent 60%); opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
-    }
-    div[data-testid="stVerticalBlock"]:has(.ao-targeting-marker):not(:has(div[data-testid="stVerticalBlock"] .ao-targeting-marker)):hover::after { opacity: 1; }
-    div[data-testid="stVerticalBlock"]:has(.ao-targeting-marker):not(:has(div[data-testid="stVerticalBlock"] .ao-targeting-marker)):hover {
-        transform: translateY(-3px); box-shadow: 0 12px 40px rgba(230,49,83,0.25);
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 20% 0%, rgba(230,49,83,0.25), transparent 60%);
+        pointer-events: none;
     }
     
-    .ao-box-title { font-size: 1.05rem; font-weight: 700; color: #ff4d6d; margin-bottom: 0.3rem; }
-    .ao-box-desc { color: #c7c9d1; font-size: 0.9rem; margin-bottom: 1.2rem; }
+    div[data-testid="stVerticalBlock"]:has(.ao-targeting-marker):not(:has(div[data-testid="stVerticalBlock"] .ao-targeting-marker))::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(230,49,83,0.08), transparent 60%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+    
+    div[data-testid="stVerticalBlock"]:has(.ao-targeting-marker):not(:has(div[data-testid="stVerticalBlock"] .ao-targeting-marker)):hover::after {
+        opacity: 1;
+    }
+    
+    div[data-testid="stVerticalBlock"]:has(.ao-targeting-marker):not(:has(div[data-testid="stVerticalBlock"] .ao-targeting-marker)):hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 40px rgba(230,49,83,0.25);
+    }
+    
+    .ao-box-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #ff4d6d;
+        margin-bottom: 0.3rem;
+    }
+    
+    .ao-box-desc {
+        color: #c7c9d1;
+        font-size: 0.9rem;
+        margin-bottom: 1.2rem;
+    }
 
-    div[data-testid="stVerticalBlock"]:has(.ao-targeting-marker):not(:has(div[data-testid="stVerticalBlock"] .ao-targeting-marker)) .stMultiSelect { margin-bottom: 0; }
+    div[data-testid="stVerticalBlock"]:has(.ao-targeting-marker):not(:has(div[data-testid="stVerticalBlock"] .ao-targeting-marker)) .stMultiSelect {
+        margin-bottom: 0;
+    }
     div[data-testid="stVerticalBlock"]:has(.ao-targeting-marker):not(:has(div[data-testid="stVerticalBlock"] .ao-targeting-marker)) .stMultiSelect[data-baseweb="select"] {
-        background: var(--surface) !important; border: 1px solid var(--border) !important; border-radius: 8px !important;
+        background: var(--surface) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 8px !important;
     }
 
     /* ── INPUTS ── */
-    .stTextInput > div > div > input, .stTextArea > div > div > textarea, .stSelectbox > div > div, .stMultiSelect > div > div {
-        background: var(--surface) !important; border: 1px solid var(--border) !important; border-radius: 8px !important;
-        color: var(--text) !important; font-family: 'DM Sans', sans-serif !important; font-size: 0.92rem !important;
+    .stTextInput > div > div > input,
+    .stTextArea > div > div > textarea,
+    .stSelectbox > div > div,
+    .stMultiSelect > div > div {
+        background: var(--surface) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 8px !important;
+        color: var(--text) !important;
+        font-family: 'DM Sans', sans-serif !important;
+        font-size: 0.92rem !important;
         transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
     }
-    .stTextInput > div > div > input:focus, .stTextArea > div > div > textarea:focus {
-        border-color: rgba(230,49,83,0.5) !important; box-shadow: 0 0 0 3px rgba(230,49,83,0.1) !important;
+    .stTextInput > div > div > input:focus,
+    .stTextArea > div > div > textarea:focus {
+        border-color: rgba(230,49,83,0.5) !important;
+        box-shadow: 0 0 0 3px rgba(230,49,83,0.1) !important;
     }
+
     label, .stRadio > label, .stCheckbox > label {
-        color: var(--text-soft) !important; font-size: 0.85rem !important; font-weight: 500 !important; letter-spacing: 0.01em !important;
+        color: var(--text-soft) !important;
+        font-size: 0.85rem !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.01em !important;
     }
 
-    .stRadio > div { gap: 6px !important; }
+    .stRadio > div {
+        gap: 6px !important;
+    }
     .stRadio > div > label {
-        background: var(--surface) !important; border: 1px solid var(--border) !important; border-radius: 8px !important;
-        padding: 10px 16px !important; transition: border-color 0.2s ease, background 0.2s ease !important;
-        color: var(--text) !important; font-size: 0.88rem !important; cursor: pointer;
+        background: var(--surface) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 8px !important;
+        padding: 10px 16px !important;
+        transition: border-color 0.2s ease, background 0.2s ease !important;
+        color: var(--text) !important;
+        font-size: 0.88rem !important;
+        cursor: pointer;
     }
-    .stRadio > div > label:hover { border-color: rgba(230,49,83,0.4) !important; background: rgba(230,49,83,0.05) !important; }
-    .stRadio > div > label[data-baseweb="radio"] input:checked + div { background-color: var(--accent) !important; border-color: var(--accent) !important; }
+    .stRadio > div > label:hover {
+        border-color: rgba(230,49,83,0.4) !important;
+        background: rgba(230,49,83,0.05) !important;
+    }
 
-    .stButton > button {
-        background: linear-gradient(135deg, #e63153 0%, #c91d41 100%) !important; color: white !important; border: none !important;
-        border-radius: 10px !important; padding: 14px 28px !important; font-family: 'Syne', sans-serif !important;
-        font-size: 0.95rem !important; font-weight: 700 !important; letter-spacing: 0.04em !important;
-        text-transform: uppercase !important; transition: all 0.25s ease !important; box-shadow: 0 4px 20px rgba(230,49,83,0.3) !important;
-        width: 100% !important; margin-top: 1.5rem !important;
+    /* Evite que les radios soient sélectionnées par défaut en cachant l'outline si vide */
+    .stRadio > div > label[data-baseweb="radio"] input:checked + div {
+        background-color: var(--accent) !important;
+        border-color: var(--accent) !important;
     }
-    .stButton > button:hover {
-        transform: translateY(-2px) !important; box-shadow: 0 8px 30px rgba(230,49,83,0.45) !important;
+
+    .stFormSubmitButton > button, .stButton > button {
+        background: linear-gradient(135deg, #e63153 0%, #c91d41 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 10px !important;
+        padding: 14px 28px !important;
+        font-family: 'Syne', sans-serif !important;
+        font-size: 0.95rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.04em !important;
+        text-transform: uppercase !important;
+        transition: all 0.25s ease !important;
+        box-shadow: 0 4px 20px rgba(230,49,83,0.3) !important;
+        width: 100% !important;
+        margin-top: 1.5rem !important;
+    }
+    .stFormSubmitButton > button:hover, .stButton > button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 30px rgba(230,49,83,0.45) !important;
         background: linear-gradient(135deg, #f0365a 0%, #d42246 100%) !important;
     }
 
-    .stAlert { border-radius: 10px !important; border-left-width: 3px !important; font-family: 'DM Sans', sans-serif !important; }
-    .footer-note { text-align: center; font-size: 0.78rem; color: var(--muted); margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
-    #MainMenu, footer, header { visibility: hidden !important; } .stDeployButton { display: none !important; }
+    .stAlert {
+        border-radius: 10px !important;
+        border-left-width: 3px !important;
+        font-family: 'DM Sans', sans-serif !important;
+    }
+
+    .footer-note {
+        text-align: center;
+        font-size: 0.78rem;
+        color: var(--muted);
+        margin-top: 3rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border);
+    }
+
+    #MainMenu, footer, header { visibility: hidden !important; }
+    .stDeployButton { display: none !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -407,66 +379,39 @@ FORBIDDEN_NAMES =[
     "indépendant", "x", "xxx", "-", "none", "null",
 ]
 
-# --- 5. HERO SECTION ---
+# --- 5. HERO ---
+st.markdown('<div class="hero-badge">🎯 Accès gratuit </div>', unsafe_allow_html=True)
 st.markdown("""
-<div class="hero-wrapper">
-    <!-- Côté Gauche : Textes & Stats -->
-    <div class="hero-content">
-        <div class="hero-badge">🎯 Accès gratuit</div>
-        <div class="hero-title">
-            Recevez vos Appels d'Offres<br><span>filtrés & automatisés.</span>
-        </div>
-        <div class="hero-sub">
-            Accédez aux marchés publics de <strong style="color:#e8e8f0">marchespublics.gov.ma</strong>, <strong style="color:#e8e8f0">Tanmia</strong>, <strong style="color:#e8e8f0">CDG</strong>, 
-            <strong style="color:#e8e8f0">Bank Al-Maghrib</strong>, <strong style="color:#e8e8f0">ONCF</strong>, <strong style="color:#e8e8f0">RAM</strong>, <strong style="color:#e8e8f0">United Nations</strong>... directement dans votre boîte mail, filtrés selon votre secteur, <strong style="color:#e8e8f0">chaque matin à 8:00h.</strong> 
-            <ul>
-                <li><strong style="color:#e8e8f0">Le nom du projet</strong></li>
-                <li><strong style="color:#e8e8f0">La date limite</strong></li>
-                <li><strong style="color:#e8e8f0">La localisation</strong></li>
-                <li><strong style="color:#e8e8f0">L’organisme émetteur</strong></li>
-                <li><strong style="color:#e8e8f0">Le budget estimé & La caution</strong></li>
-            </ul>
-        </div>
-        <div class="stat-row">
-            <div class="stat-item"><div class="stat-num">2 400+</div><div class="stat-label">AO publiés chaque mois</div></div>
-            <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">Gratuit pour les entreprises</div></div>
-            <div class="stat-item"><div class="stat-num">&lt; 2 min</div><div class="stat-label">Pour paramétrer vos alertes</div></div>
-        </div>
-    </div>
-
-    <!-- Côté Droit : Visuel Abstrait Tech/IA 100% CSS (Pas d'image) -->
-    <div class="hero-visual">
-        <div class="ai-network">
-            <div class="orbit orbit-1"></div>
-            <div class="orbit orbit-2"></div>
-            <div class="orbit orbit-3"></div>
-            <div class="core-node"></div>
-            
-            <svg class="network-lines" viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg">
-                <!-- Lignes de connexion (Data flow) -->
-                <line x1="160" y1="160" x2="40" y2="90" />
-                <line x1="160" y1="160" x2="280" y2="60" />
-                <line x1="160" y1="160" x2="260" y2="280" />
-                <line x1="160" y1="160" x2="80" y2="260" />
-                <line x1="160" y1="160" x2="10" y2="200" />
-                <!-- Noeuds externes -->
-                <circle cx="40" cy="90" r="4" fill="#e63153" />
-                <circle cx="280" cy="60" r="5" fill="#f97316" />
-                <circle cx="260" cy="280" r="4" fill="#e63153" />
-                <circle cx="80" cy="260" r="3" fill="#f97316" />
-                <circle cx="10" cy="200" r="4" fill="#e63153" />
-            </svg>
-        </div>
-    </div>
+<div class="hero-title">
+    Recevez vos Appels d'Offres<br><span>filtrés & automatisés.</span>
+</div>
+<div class="hero-sub">
+    Accédez aux marchés publics de <strong style="color:#e8e8f0">marchespublics.gov.ma</strong>, <strong style="color:#e8e8f0">Tanmia</strong>, <strong style="color:#e8e8f0">CDG</strong>, 
+    <strong style="color:#e8e8f0">Bank Al-Maghrib</strong>, <strong style="color:#e8e8f0">ONCF</strong>, <strong style="color:#e8e8f0">RAM</strong>, <strong style="color:#e8e8f0">United Nations</strong>, ... directement dans votre boîte mail, filtrés selon votre secteur, <strong style="color:#e8e8f0">chaque matin à 8:00h.</strong> 
+    <br>
+    Chaque appel d’offres inclut :
+    <ul>
+      <li><strong style="color:#e8e8f0">Le nom du projet</strong></li>
+      <li><strong style="color:#e8e8f0">La date limite</strong></li>
+      <li><strong style="color:#e8e8f0">La localisation</strong></li>
+      <li><strong style="color:#e8e8f0">L’organisme émetteur</strong></li>
+      <li><strong style="color:#e8e8f0">Le budget estimé</strong></li>
+      <li><strong style="color:#e8e8f0">La caution</strong></li>
+    </ul>
+    En échange, aidez-nous à cartographier la maturité digitale des entreprises marocaines.
 </div>
 """, unsafe_allow_html=True)
 
+st.markdown("""
+<div class="stat-row">
+    <div class="stat-item"><div class="stat-num">2 400+</div><div class="stat-label">AO publiés chaque mois</div></div>
+    <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">Gratuit pour les entreprises</div></div>
+    <div class="stat-item"><div class="stat-num">&lt; 2 min</div><div class="stat-label">Pour paramétrer vos alertes</div></div>
+</div>
+""", unsafe_allow_html=True)
 
-# --- 6. FORM (Centré et contraint pour ne pas être trop étiré) ---
-# L'utilisation de ces colonnes permet de centrer le formulaire sous le grand "Hero"
-_, main_col, _ = st.columns([1, 4.5, 1])
-
-with main_col:
+# --- 6. FORM (Utilisation de st.container pour l'interactivité dynamique) ---
+with st.container():
 
     # ── BLOCK A : ENTERPRISE INFO ──
     st.markdown("""
@@ -624,21 +569,7 @@ with main_col:
     </div>
     """, unsafe_allow_html=True)
 
-    q_top_pain = st.selectbox("Quel est votre principal goulot d'étranglement opérationnel en ce moment ?",[
-        "Veille et préparation des Appels d'Offres",
-        "Saisie manuelle des données (devis, factures, ERP)",
-        "Suivi commercial et relance client",
-        "Gestion documentaire et conformité (archivage, ISO)",
-        "Recrutement et tri des candidatures",
-        "Reporting & analyse de données",
-        "Communication interne et coordination d'équipes",
-        "Service client et support après-vente",
-        "Autre",
-    ], index=None, placeholder="Sélectionnez...")
-
-    q_top_pain_autre = ""
-    if q_top_pain == "Autre":
-        q_top_pain_autre = st.text_input("Veuillez préciser votre goulot d'étranglement *", placeholder="Décrivez votre situation...")
+    q_top_pain = st.text_input("Quel est votre problèmes opérationnelles actuellement ? *", placeholder="Décrivez votre situation...")
 
     q_time_lost = st.selectbox("Combien d'heures par semaine estimez-vous perdre sur des tâches manuelles ?",[
         "Moins de 5 heures",
@@ -725,6 +656,7 @@ with main_col:
         "Non, pas pour le moment",
     ], index=None)
 
+
     q_comment = st.text_area(
         "Un commentaire libre, une question, ou une idée d'automatisation que vous souhaitez explorer ? (optionnel)",
         placeholder="Toute remarque est précieuse — nous lisons chaque réponse.",
@@ -736,69 +668,81 @@ with main_col:
         use_container_width=True
     )
 
-    # --- 7. VALIDATION & SUBMISSION ---
-    if submitted:
-        company_clean = company_name.strip().lower()
+# --- 7. VALIDATION & SUBMISSION ---
+if submitted:
+    company_clean = company_name.strip().lower()
 
-        required_fields =[
-            company_name, secteur_entreprise, email, phone, city, effectif,
-            age_entreprise, ca_range, role_respondant, tags, Email_Newsletter, 
-            q_digital_tools, q_dream_automation
-        ]
+    required_fields =[
+        company_name, secteur_entreprise, email, phone, city, effectif,
+        age_entreprise, ca_range, role_respondant, tags, Email_Newsletter, 
+        q_digital_tools, q_dream_automation
+    ]
 
-        if not all(required_fields):
-            st.error("⚠️ Veuillez remplir tous les champs obligatoires marqués d'un astérisque (*).")
-            
-        elif q_top_pain == "Autre" and not q_top_pain_autre.strip():
-            st.error("⚠️ Vous avez sélectionné 'Autre' comme goulot d'étranglement. Veuillez préciser votre situation.")
+    if not all(required_fields):
+        st.error("⚠️ Veuillez remplir tous les champs obligatoires marqués d'un astérisque (*).")
+        
+    # Vérification stricte si l'utilisateur a choisi "Autre"
+    elif q_top_pain == "Autre" and not q_top_pain_autre.strip():
+        st.error("⚠️ Vous avez sélectionné 'Autre' comme goulot d'étranglement. Veuillez préciser votre situation.")
 
-        elif company_clean in FORBIDDEN_NAMES or len(company_clean) < 2:
-            st.error("❌ Veuillez entrer un nom d'entreprise valide. Ce service est réservé aux structures B2B identifiées.")
+    elif company_clean in FORBIDDEN_NAMES or len(company_clean) < 2:
+        st.error("❌ Veuillez entrer un nom d'entreprise valide. Ce service est réservé aux structures B2B identifiées.")
 
-        elif "@" not in email or "." not in email.split("@")[-1]:
-            st.error("❌ L'adresse email semble invalide. Veuillez vérifier.")
+    elif "@" not in email or "." not in email.split("@")[-1]:
+        st.error("❌ L'adresse email semble invalide. Veuillez vérifier.")
 
-        else:
-            try:
-                with st.spinner("Enregistrement en cours…"):
-                    current_time       = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                    secteurs_ao_str    = ", ".join(tags)
-                    ai_tools_str       = ", ".join(q_ai_tools) if q_ai_tools else "Aucun"
-                    digital_tools_str  = q_digital_tools if q_digital_tools else "Aucun"
-                    
-                    final_top_pain = f"Autre : {q_top_pain_autre}" if q_top_pain == "Autre" else q_top_pain
-                    
-                    q_decision_maker = "Non demandé (supprimé du form)"
-                    q_source = "Non demandé (supprimé du form)"
-                    
-                    raw_row =[
-                        current_time, company_name, secteur_entreprise, ca_range,
-                        age_entreprise, effectif, role_respondant,
-                        website, city, email, phone,
-                        secteurs_ao_str,
-                        q_ao_freq, q_ao_management, q_ao_time, q_ao_pain, q_ao_win_rate,
-                        q_ai_usage, ai_tools_str, q_lowcode, q_data_infra, digital_tools_str,
-                        final_top_pain, q_time_lost, q_priority_dept, q_existing_automation, q_dream_automation,
-                        q_budget, q_decision_maker, q_barrier, q_timeline,
-                        q_cps_ai, q_pilot, q_source, q_comment, Email_Newsletter
-                    ]
-                    
-                    row_to_insert =[str(val) if (val is not None and val != "") else "Non renseigné" for val in raw_row]
+    else:
+        try:
+            with st.spinner("Enregistrement en cours…"):
+                current_time       = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                secteurs_ao_str    = ", ".join(tags)
+                ai_tools_str       = ", ".join(q_ai_tools) if q_ai_tools else "Aucun"
+                
+                # BUG CORRIGÉ : q_digital_tools est maintenant un text_input (string), on ne fait plus de .join()
+                digital_tools_str  = q_digital_tools if q_digital_tools else "Aucun"
+                
+                # Récupère la précision si "Autre" a été sélectionné
+                final_top_pain = f"Autre : {q_top_pain_autre}" if q_top_pain == "Autre" else q_top_pain
+                
+                # VARIABLES SUPPRIMÉES : on garde les placeholders pour ne pas casser vos colonnes Google Sheets
+                q_decision_maker = "Non demandé (supprimé du form)"
+                q_source = "Non demandé (supprimé du form)"
+                
+                # Création de la ligne "brute" (avec Email_Newsletter ajouté à la fin)
+                raw_row =[
+                    current_time, company_name, secteur_entreprise, ca_range,
+                    age_entreprise, effectif, role_respondant,
+                    website, city, email, phone,
+                    secteurs_ao_str,
+                    # AO Process
+                    q_ao_freq, q_ao_management, q_ao_time, q_ao_pain, q_ao_win_rate,
+                    # AI Maturity
+                    q_ai_usage, ai_tools_str, q_lowcode, q_data_infra, digital_tools_str,
+                    # Pain points
+                    final_top_pain, q_time_lost, q_priority_dept, q_existing_automation, q_dream_automation,
+                    # Budget & decision
+                    q_budget, q_decision_maker, q_barrier, q_timeline,
+                    # Interest
+                    q_cps_ai, q_pilot, q_source, q_comment, Email_Newsletter
+                ]
+                
+                # Remplacement sécurisé des champs laissés vides (None ou "")
+                row_to_insert =[str(val) if (val is not None and val != "") else "Non renseigné" for val in raw_row]
 
-                    gc = init_google_sheets()
-                    sheet = gc.open(GOOGLE_SHEET_NAME).sheet1
-                    sheet.append_row(row_to_insert)
+                gc = init_google_sheets()
+                sheet = gc.open(GOOGLE_SHEET_NAME).sheet1
+                sheet.append_row(row_to_insert)
 
-                st.success("✅ Inscription validée ! Vous recevrez vos premiers Appels d'Offres ciblés prochainement.")
-                st.balloons()
+            st.success("✅ Inscription validée ! Vous recevrez vos premiers Appels d'Offres ciblés prochainement.")
+            st.balloons()
 
-            except Exception as e:
-                st.error(f"Une erreur est survenue lors de l'enregistrement. Réessayez ou contactez-nous. Détails : {e}")
+        except Exception as e:
+            st.error(f"Une erreur est survenue lors de l'enregistrement. Réessayez ou contactez-nous. Détails : {e}")
 
 # --- 8. FOOTER ---
 st.markdown("""
 <div class="footer-note">
-    Données traitées de façon confidentielle — aucune revente à des tiers.<br>
+    Conformité RGPD : vos données sont traitées de manière confidentielle — aucune revente à des tiers.<br>
     <strong>Morocco · Maroc</strong>
 </div>
 """, unsafe_allow_html=True)

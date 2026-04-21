@@ -40,7 +40,7 @@ AO_CATEGORIES =[
 ]
 
 # --- 4. UI HEADER ---
-st.title("Recevez vos Appels d'Offres Filtrés (Gratuit)")
+st.title("Recevez vos Appels d'Offres Filtrés")
 st.markdown("""
 Gagnez des heures de recherche chaque semaine. Recevez les appels d'offres de *marchespublics.gov.ma* et *Tanmia* directement dans votre boîte mail, filtrés selon **votre secteur d'activité**.
 

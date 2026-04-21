@@ -416,8 +416,8 @@ with st.form("lead_gen_form", clear_on_submit=False):
     with col1:
         company_name     = st.text_input("Raison sociale *", placeholder="Ex: TargetUp SARL")
         secteur_entreprise = st.selectbox("Secteur d'activité principal *", SECTEURS_ENTREPRISE, index=None, placeholder="Sélectionnez...")
-        email            = st.text_input("Email professionnel *", placeholder="contact@entreprise.ma")
-        phone            = st.text_input("Téléphone / WhatsApp *", placeholder="06 XX XX XX XX")
+        email            = st.text_input("Email *", placeholder="")
+        phone            = st.text_input("Téléphone / WhatsApp *", placeholder="")
     with col2:
         city             = st.selectbox("Ville du siège *", MOROCCAN_CITIES, index=None, placeholder="Sélectionnez...")
         effectif         = st.selectbox("Effectif de l'entreprise *",[
@@ -466,6 +466,7 @@ with st.form("lead_gen_form", clear_on_submit=False):
             label_visibility="collapsed",
             placeholder="Choisissez vos secteurs cibles…"
         )
+        Email_Newsletter =  st.text_input("Email de réception des appels d’offres *", placeholder="")
 
     q_ao_freq = st.selectbox("Combien d'AO soumettez-vous en moyenne par mois ?",[
         "Nous ne participons pas encore aux AO",

@@ -149,21 +149,28 @@ st.markdown("""
         white-space: nowrap;
     }
 
-    /* ── AO TARGETING BOX (merged) ── */
-    .ao-targeting-wrapper {
-        background: linear-gradient(135deg, #2a0d14 0%, #1a0a0f 100%);
-        border: 1px solid rgba(230,49,83,0.35);
-        border-left: 4px solid #e63153;
-        border-radius: 12px;
-        padding: 22px 26px 26px 26px;
-        margin: 1.5rem 0 2rem 0;
+    /* ── AO TARGETING BOX (SOLUTION AVEC MARQUEUR CSS) ── */
+    
+    /* 1. On cache l'espace occupé par le marqueur invisible */
+    div.element-container:has(.ao-targeting-marker) {
+        display: none !important;
+    }
+
+    /* 2. On cible le container Streamlit (stVerticalBlock) le plus profond contenant le marqueur */
+    div[data-testid="stVerticalBlock"]:has(.ao-targeting-marker):not(:has(div[data-testid="stVerticalBlock"] .ao-targeting-marker)) {
+        background: linear-gradient(135deg, #2a0d14 0%, #1a0a0f 100%) !important;
+        border: 1px solid rgba(230,49,83,0.35) !important;
+        border-left: 4px solid #e63153 !important;
+        border-radius: 12px !important;
+        padding: 22px 26px 26px 26px !important;
+        margin: 1.5rem 0 2rem 0 !important;
         position: relative;
         overflow: hidden;
         transition: all 0.25s ease;
     }
     
-    /* 🔴 Glow effect (THIS is what makes it pop) */
-    .ao-targeting-wrapper::before {
+    /* 🔴 Glow effect */
+    div[data-testid="stVerticalBlock"]:has(.ao-targeting-marker):not(:has(div[data-testid="stVerticalBlock"] .ao-targeting-marker))::before {
         content: '';
         position: absolute;
         inset: 0;
@@ -171,8 +178,8 @@ st.markdown("""
         pointer-events: none;
     }
     
-    /* subtle animated shine */
-    .ao-targeting-wrapper::after {
+    /* Animated shine */
+    div[data-testid="stVerticalBlock"]:has(.ao-targeting-marker):not(:has(div[data-testid="stVerticalBlock"] .ao-targeting-marker))::after {
         content: '';
         position: absolute;
         top: -50%;
@@ -182,34 +189,37 @@ st.markdown("""
         background: radial-gradient(circle, rgba(230,49,83,0.08), transparent 60%);
         opacity: 0;
         transition: opacity 0.3s ease;
+        pointer-events: none;
     }
     
-    .ao-targeting-wrapper:hover::after {
+    div[data-testid="stVerticalBlock"]:has(.ao-targeting-marker):not(:has(div[data-testid="stVerticalBlock"] .ao-targeting-marker)):hover::after {
         opacity: 1;
     }
     
-    .ao-targeting-wrapper:hover {
+    div[data-testid="stVerticalBlock"]:has(.ao-targeting-marker):not(:has(div[data-testid="stVerticalBlock"] .ao-targeting-marker)):hover {
         transform: translateY(-3px);
         box-shadow: 0 12px 40px rgba(230,49,83,0.25);
     }
     
-    /* stronger title */
-    .ao-targeting-wrapper h4 {
+    /* Titre et Paragraphe adaptés pour la Box */
+    .ao-box-title {
         font-size: 1.05rem;
         font-weight: 700;
         color: #ff4d6d;
+        margin-bottom: 0.3rem;
     }
     
-    /* improve text contrast */
-    .ao-targeting-wrapper p {
+    .ao-box-desc {
         color: #c7c9d1;
+        font-size: 0.9rem;
+        margin-bottom: 1.2rem;
     }
 
-    /* Remove Streamlit default container gaps inside the wrapper */
-    .ao-targeting-wrapper .stMultiSelect {
+    /* Style spécifique au multiselect dans la box */
+    div[data-testid="stVerticalBlock"]:has(.ao-targeting-marker):not(:has(div[data-testid="stVerticalBlock"] .ao-targeting-marker)) .stMultiSelect {
         margin-bottom: 0;
     }
-    .ao-targeting-wrapper .stMultiSelect [data-baseweb="select"] {
+    div[data-testid="stVerticalBlock"]:has(.ao-targeting-marker):not(:has(div[data-testid="stVerticalBlock"] .ao-targeting-marker)) .stMultiSelect[data-baseweb="select"] {
         background: var(--surface) !important;
         border: 1px solid var(--border) !important;
         border-radius: 8px !important;
@@ -306,7 +316,7 @@ GOOGLE_SHEET_NAME = "Leads_Appels_Offres_Maroc"
 
 @st.cache_resource
 def init_google_sheets():
-    scopes = [
+    scopes =[
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive"
     ]
@@ -316,7 +326,7 @@ def init_google_sheets():
     return client
 
 # --- 4. DATA ---
-AO_CATEGORIES = [
+AO_CATEGORIES =[
     "Constructions & Gros Œuvre", "Génie Civil & Infrastructures",
     "Aménagement & Finition", "Électricité & Plomberie",
     "Nettoyage & Entretien", "Gardiennage & Sécurité",
@@ -331,7 +341,7 @@ AO_CATEGORIES = [
     "Agriculture & Irrigation", "Télécommunications",
 ]
 
-MOROCCAN_CITIES = [
+MOROCCAN_CITIES =[
     "Casablanca", "Rabat", "Marrakech", "Tanger", "Agadir",
     "Fès", "Meknès", "Oujda", "Béni Mellal", "Nador",
     "Tétouan", "El Jadida", "Safi", "Kénitra", "Mohammadia",
@@ -364,7 +374,7 @@ SECTEURS_ENTREPRISE = sorted([
     "Tourisme & Loisirs",
 ])
 
-FORBIDDEN_NAMES = [
+FORBIDDEN_NAMES =[
     "n/a", "na", "anonyme", "confidentiel", "secret", "aucun", "rien",
     "test", "freelance", "particulier", "self employed", "independant",
     "indépendant", "x", "xxx", "-", "none", "null",
@@ -411,19 +421,19 @@ with st.form("lead_gen_form", clear_on_submit=False):
         phone            = st.text_input("Téléphone / WhatsApp *", placeholder="06 XX XX XX XX")
     with col2:
         city             = st.selectbox("Ville du siège *", MOROCCAN_CITIES)
-        effectif         = st.selectbox("Effectif de l'entreprise *", [
+        effectif         = st.selectbox("Effectif de l'entreprise *",[
             "Auto-entrepreneur / TPE (1-5 personnes)",
             "Petite entreprise (6-20 personnes)",
             "Moyenne entreprise (21-100 personnes)",
             "Grande entreprise (100-500 personnes)",
             "Groupe / Holding (500+ personnes)",
         ])
-        age_entreprise   = st.selectbox("Ancienneté de l'entreprise *", [
+        age_entreprise   = st.selectbox("Ancienneté de l'entreprise *",[
             "Moins d'un an", "1 à 3 ans", "3 à 7 ans", "7 à 15 ans", "Plus de 15 ans"
         ])
         website          = st.text_input("Site web (optionnel)", placeholder="www.entreprise.ma")
 
-    ca_range = st.selectbox("Chiffre d'affaires annuel estimé *", [
+    ca_range = st.selectbox("Chiffre d'affaires annuel estimé *",[
         "Moins de 500 000 DH",
         "500 000 – 2 000 000 DH",
         "2 000 000 – 10 000 000 DH",
@@ -432,7 +442,7 @@ with st.form("lead_gen_form", clear_on_submit=False):
         "Préfère ne pas répondre",
     ])
 
-    role_respondant = st.selectbox("Votre fonction dans l'entreprise *", [
+    role_respondant = st.selectbox("Votre fonction dans l'entreprise *",[
         "Dirigeant / PDG / Associé",
         "Directeur général ou adjoint",
         "Directeur commercial / Business developer",
@@ -442,13 +452,14 @@ with st.form("lead_gen_form", clear_on_submit=False):
         "Autre",
     ])
 
-    # ── BLOCK B : AO TARGETING (merged box) ──
+    # ── BLOCK B : AO TARGETING (AVEC MARQUEUR INVISIBLE) ──
     with st.container():
-        st.markdown('<div class="ao-targeting-wrapper">', unsafe_allow_html=True)
+        # Ce marqueur permet au CSS de cibler UNIQUEMENT cette box
+        st.markdown('<span class="ao-targeting-marker"></span>', unsafe_allow_html=True)
     
         st.markdown("""
-            <h4>🎯 Ciblage de vos Appels d'Offres</h4>
-            <p>Sélectionnez un ou plusieurs secteurs. Vous recevrez uniquement les AO correspondants, chaque matin par email.</p>
+            <div class="ao-box-title">🎯 Ciblage de vos Appels d'Offres</div>
+            <div class="ao-box-desc">Sélectionnez un ou plusieurs secteurs. Vous recevrez uniquement les AO correspondants, chaque matin par email.</div>
         """, unsafe_allow_html=True)
     
         tags = st.multiselect(
@@ -457,29 +468,27 @@ with st.form("lead_gen_form", clear_on_submit=False):
             label_visibility="collapsed",
             placeholder="Choisissez vos secteurs cibles…"
         )
-    
-        st.markdown('</div>', unsafe_allow_html=True)
 
-    q_ao_freq = st.selectbox("Combien d'AO soumettez-vous en moyenne par mois ?", [
+    q_ao_freq = st.selectbox("Combien d'AO soumettez-vous en moyenne par mois ?",[
         "Nous ne participons pas encore aux AO",
         "1 à 3 AO/mois", "4 à 10 AO/mois", "Plus de 10 AO/mois",
     ])
 
-    q_ao_management = st.radio("Comment gérez-vous actuellement votre veille AO ?", [
+    q_ao_management = st.radio("Comment gérez-vous actuellement votre veille AO ?",[
         "Recherche manuelle et irrégulière",
         "Une personne dédiée à la veille",
         "Abonnement à un service de veille",
         "Pas de veille structurée",
     ])
 
-    q_ao_time = st.selectbox("Combien de temps passez-vous à préparer un dossier de soumission ?", [
+    q_ao_time = st.selectbox("Combien de temps passez-vous à préparer un dossier de soumission ?",[
         "Moins de 2 jours",
         "2 à 5 jours ouvrés",
         "1 à 2 semaines",
         "Plus de 2 semaines",
     ])
 
-    q_ao_pain = st.selectbox("Quel est votre principal défi sur les Appels d'Offres ?", [
+    q_ao_pain = st.selectbox("Quel est votre principal défi sur les Appels d'Offres ?",[
         "Trouver les AO pertinents à temps",
         "Lire et comprendre le CPS (Cahier des Prescriptions Spéciales)",
         "Constituer le dossier administratif",
@@ -488,12 +497,12 @@ with st.form("lead_gen_form", clear_on_submit=False):
         "Manque de ressources humaines dédiées",
     ])
 
-    q_ao_win_rate = st.selectbox("Quel est votre taux de succès estimé sur vos soumissions AO ?", [
+    q_ao_win_rate = st.selectbox("Quel est votre taux de succès estimé sur vos soumissions AO ?",[
         "Je ne sais pas / pas de suivi",
         "Moins de 10%", "10% à 25%", "25% à 50%", "Plus de 50%",
     ])
 
-    # ── BLOCK D : AI & DIGITAL MATURITY ──
+    # ── BLOCK C : AI & DIGITAL MATURITY ──
     st.markdown("""
     <div class="section-divider">
         <div class="section-divider-line"></div>
@@ -502,7 +511,7 @@ with st.form("lead_gen_form", clear_on_submit=False):
     </div>
     """, unsafe_allow_html=True)
 
-    q_ai_usage = st.selectbox("À quelle fréquence utilisez-vous l'Intelligence Artificielle en entreprise ?", [
+    q_ai_usage = st.selectbox("À quelle fréquence utilisez-vous l'Intelligence Artificielle en entreprise ?",[
         "Jamais — nous n'avons pas encore exploré",
         "Quelques tests individuels (ChatGPT personnel…)",
         "Utilisation régulière sur certains postes (rédaction, recherche)",
@@ -510,21 +519,21 @@ with st.form("lead_gen_form", clear_on_submit=False):
         "IA centrale dans notre stratégie opérationnelle",
     ])
 
-    q_ai_tools = st.multiselect("Quels outils IA utilisez-vous actuellement ? (plusieurs choix possibles)", [
+    q_ai_tools = st.multiselect("Quels outils IA utilisez-vous actuellement ? (plusieurs choix possibles)",[
         "ChatGPT / GPT-4", "Claude (Anthropic)", "Gemini (Google)",
         "Copilot (Microsoft)", "Midjourney / DALL-E (images)",
         "Outils IA intégrés dans des logiciels métiers",
         "IA développée en interne", "Aucun outil IA pour l'instant",
     ], placeholder="Sélectionnez…")
 
-    q_lowcode = st.radio("Connaissez-vous les outils d'automatisation Low-Code (n8n, Make, Zapier…) ?", [
+    q_lowcode = st.radio("Connaissez-vous les outils d'automatisation Low-Code (n8n, Make, Zapier…) ?",[
         "Non, première fois que j'en entends parler",
         "Oui de nom, mais sans utilisation concrète",
         "Oui, nous les utilisons occasionnellement",
         "Oui, ils sont intégrés dans nos processus",
     ])
 
-    q_data_infra = st.radio("Comment gérez-vous vos données clients et opérationnelles ?", [
+    q_data_infra = st.radio("Comment gérez-vous vos données clients et opérationnelles ?",[
         "Fichiers Excel / Google Sheets uniquement",
         "CRM basique (HubSpot free, Zoho…)",
         "ERP ou CRM avancé (Odoo, SAP, Dynamics…)",
@@ -532,7 +541,7 @@ with st.form("lead_gen_form", clear_on_submit=False):
         "Pas de gestion structurée",
     ])
 
-    q_digital_tools = st.multiselect("Quels outils digitaux sont déjà en place dans votre entreprise ?", [
+    q_digital_tools = st.multiselect("Quels outils digitaux sont déjà en place dans votre entreprise ?",[
         "Suite Google Workspace", "Microsoft 365",
         "Logiciel de comptabilité (Sage, Ciel…)",
         "ERP / Odoo", "CRM (HubSpot, Salesforce, Zoho…)",
@@ -541,7 +550,7 @@ with st.form("lead_gen_form", clear_on_submit=False):
         "Aucun outil spécifique",
     ], placeholder="Sélectionnez les outils en place…")
 
-    # ── BLOCK E : PAIN POINTS ──
+    # ── BLOCK D : PAIN POINTS ──
     st.markdown("""
     <div class="section-divider">
         <div class="section-divider-line"></div>
@@ -550,7 +559,7 @@ with st.form("lead_gen_form", clear_on_submit=False):
     </div>
     """, unsafe_allow_html=True)
 
-    q_top_pain = st.selectbox("Quel est votre principal goulot d'étranglement opérationnel en ce moment ?", [
+    q_top_pain = st.selectbox("Quel est votre principal goulot d'étranglement opérationnel en ce moment ?",[
         "Veille et préparation des Appels d'Offres",
         "Saisie manuelle des données (devis, factures, ERP)",
         "Suivi commercial et relance client",
@@ -562,14 +571,14 @@ with st.form("lead_gen_form", clear_on_submit=False):
         "Autre",
     ])
 
-    q_time_lost = st.selectbox("Combien d'heures par semaine estimez-vous perdre sur des tâches manuelles ?", [
+    q_time_lost = st.selectbox("Combien d'heures par semaine estimez-vous perdre sur des tâches manuelles ?",[
         "Moins de 5 heures",
         "5 à 10 heures",
         "10 à 20 heures",
         "Plus de 20 heures par semaine",
     ])
 
-    q_priority_dept = st.selectbox("Quel département bénéficierait le plus d'une automatisation ?", [
+    q_priority_dept = st.selectbox("Quel département bénéficierait le plus d'une automatisation ?",[
         "Commercial & Business Development",
         "Administration & Finances",
         "Opérations & Production",
@@ -579,7 +588,7 @@ with st.form("lead_gen_form", clear_on_submit=False):
         "Juridique & Conformité",
     ])
 
-    q_existing_automation = st.radio("Avez-vous déjà automatisé un processus dans votre entreprise ?", [
+    q_existing_automation = st.radio("Avez-vous déjà automatisé un processus dans votre entreprise ?",[
         "Non, tout est encore manuel",
         "Oui, quelques automatisations simples (alertes, rappels…)",
         "Oui, des workflows complets sont automatisés",
@@ -592,7 +601,7 @@ with st.form("lead_gen_form", clear_on_submit=False):
         height=90,
     )
 
-    # ── BLOCK F : BUDGET & STRATEGIC FIT ──
+    # ── BLOCK E : BUDGET & STRATEGIC FIT ──
     st.markdown("""
     <div class="section-divider">
         <div class="section-divider-line"></div>
@@ -601,7 +610,7 @@ with st.form("lead_gen_form", clear_on_submit=False):
     </div>
     """, unsafe_allow_html=True)
 
-    q_budget = st.selectbox("Budget annuel alloué à la digitalisation & logiciels métiers ?", [
+    q_budget = st.selectbox("Budget annuel alloué à la digitalisation & logiciels métiers ?",[
         "Moins de 10 000 DH",
         "10 000 – 50 000 DH",
         "50 000 – 200 000 DH",
@@ -610,13 +619,13 @@ with st.form("lead_gen_form", clear_on_submit=False):
         "Pas encore de budget alloué",
     ])
 
-    q_decision_maker = st.radio("Êtes-vous décisionnaire sur les achats technologiques ?", [
+    q_decision_maker = st.radio("Êtes-vous décisionnaire sur les achats technologiques ?",[
         "Oui, décision finale",
         "Je suis prescripteur (influence la décision)",
         "Non, ce n'est pas mon périmètre",
     ])
 
-    q_barrier = st.selectbox("Principal frein à l'adoption de nouvelles technologies dans votre entreprise ?", [
+    q_barrier = st.selectbox("Principal frein à l'adoption de nouvelles technologies dans votre entreprise ?",[
         "Coût d'acquisition perçu comme élevé",
         "Complexité d'utilisation / manque de formation",
         "Temps de mise en place et d'intégration",
@@ -626,7 +635,7 @@ with st.form("lead_gen_form", clear_on_submit=False):
         "Pas de frein majeur identifié",
     ])
 
-    q_timeline = st.selectbox("Dans quel délai envisagez-vous un investissement en automatisation/IA ?", [
+    q_timeline = st.selectbox("Dans quel délai envisagez-vous un investissement en automatisation/IA ?",[
         "Immédiatement — nous cherchons une solution",
         "Dans les 3 prochains mois",
         "Dans les 6 prochains mois",
@@ -634,7 +643,7 @@ with st.form("lead_gen_form", clear_on_submit=False):
         "Pas de projet concret pour l'instant",
     ])
 
-    # ── BLOCK G : INTEREST & NEXT STEP ──
+    # ── BLOCK F : INTEREST & NEXT STEP ──
     st.markdown("""
     <div class="section-divider">
         <div class="section-divider-line"></div>
@@ -643,20 +652,20 @@ with st.form("lead_gen_form", clear_on_submit=False):
     </div>
     """, unsafe_allow_html=True)
 
-    q_cps_ai = st.radio("Seriez-vous intéressé par une IA qui lit le CPS à votre place et extrait le Dossier Technique ?", [
+    q_cps_ai = st.radio("Seriez-vous intéressé par une IA qui lit le CPS à votre place et extrait le Dossier Technique ?",[
         "Pas intéressé pour l'instant",
         "Oui, si c'est gratuit ou en essai",
         "Oui, prêt à payer un abonnement mensuel",
         "Oui, et je voudrais être contacté pour une démo",
     ])
 
-    q_pilot = st.radio("Seriez-vous ouvert à tester une automatisation sur-mesure (Proof of Concept) gratuitement ?", [
+    q_pilot = st.radio("Seriez-vous ouvert à tester une automatisation sur-mesure (Proof of Concept) gratuitement ?",[
         "Oui, absolument",
         "Peut-être — à voir selon la proposition",
         "Non, pas pour le moment",
     ])
 
-    q_source = st.selectbox("Comment avez-vous entendu parler de ce service ?", [
+    q_source = st.selectbox("Comment avez-vous entendu parler de ce service ?",[
         "LinkedIn", "Recommandation d'un contact",
         "Google / Recherche web", "Email reçu",
         "Événement ou salon professionnel", "Autre",
@@ -696,7 +705,7 @@ if submitted:
                 site_web           = website if website else "Non renseigné"
                 comment_clean      = q_comment if q_comment else "—"
 
-                row_to_insert = [
+                row_to_insert =[
                     current_time, company_name, secteur_entreprise, ca_range,
                     age_entreprise, effectif, role_respondant,
                     site_web, city, email, phone,

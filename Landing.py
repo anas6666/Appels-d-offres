@@ -151,41 +151,60 @@ st.markdown("""
 
     /* ── AO TARGETING BOX (merged) ── */
     .ao-targeting-wrapper {
-        background: linear-gradient(135deg, rgba(230,49,83,0.08) 0%, rgba(249,115,22,0.05) 100%);
-        border: 1px solid rgba(230,49,83,0.2);
-        border-left: 3px solid var(--accent);
-        border-radius: 10px;
+        background: linear-gradient(135deg, #2a0d14 0%, #1a0a0f 100%);
+        border: 1px solid rgba(230,49,83,0.35);
+        border-left: 4px solid #e63153;
+        border-radius: 12px;
         padding: 22px 26px 26px 26px;
         margin: 1.5rem 0 2rem 0;
         position: relative;
         overflow: hidden;
-        transition: box-shadow 0.3s ease, transform 0.3s ease;
+        transition: all 0.25s ease;
     }
+    
+    /* 🔴 Glow effect (THIS is what makes it pop) */
     .ao-targeting-wrapper::before {
         content: '';
         position: absolute;
-        top: -30px; right: -30px;
-        width: 100px; height: 100px;
-        background: radial-gradient(circle, rgba(230,49,83,0.15), transparent 70%);
+        inset: 0;
+        background: radial-gradient(circle at 20% 0%, rgba(230,49,83,0.25), transparent 60%);
         pointer-events: none;
     }
+    
+    /* subtle animated shine */
+    .ao-targeting-wrapper::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(230,49,83,0.08), transparent 60%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .ao-targeting-wrapper:hover::after {
+        opacity: 1;
+    }
+    
     .ao-targeting-wrapper:hover {
-        box-shadow: 0 8px 32px rgba(230,49,83,0.12);
-        transform: translateY(-2px);
+        transform: translateY(-3px);
+        box-shadow: 0 12px 40px rgba(230,49,83,0.25);
     }
+    
+    /* stronger title */
     .ao-targeting-wrapper h4 {
-        font-family: 'Syne', sans-serif;
-        font-size: 1rem;
+        font-size: 1.05rem;
         font-weight: 700;
-        color: #f87196;
-        margin: 0 0 6px;
+        color: #ff4d6d;
     }
+    
+    /* improve text contrast */
     .ao-targeting-wrapper p {
-        font-size: 0.88rem;
-        color: var(--text-soft);
-        margin: 0 0 18px 0;
-        line-height: 1.6;
+        color: #c7c9d1;
     }
+
     /* Remove Streamlit default container gaps inside the wrapper */
     .ao-targeting-wrapper .stMultiSelect {
         margin-bottom: 0;

@@ -312,17 +312,33 @@ st.markdown("""
 
 # --- 3. GOOGLE SHEETS SETUP ---
 GOOGLE_SHEET_NAME = "Leads_Appels_Offres_Maroc"
+WORKSHEET_NAME = "Main" # Define worksheet name globally
 
 @st.cache_resource
 def init_google_sheets():
-    scopes =[
+    scopes = [
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive"
     ]
-    s_acc_info = st.secrets["GOOGLE_SERVICE_ACCOUNT"]
-    credentials = Credentials.from_service_account_info(s_acc_info, scopes=scopes)
+
+    service_account_info = st.secrets["GOOGLE_SERVICE_ACCOUNT"]
+    credentials = Credentials.from_service_account_info(
+        service_account_info,
+        scopes=scopes
+    )
+
     client = gspread.authorize(credentials)
-    return client
+    spreadsheet = client.open(GOOGLE_SHEET_NAME)
+
+    try:
+        worksheet = spreadsheet.worksheet(WORKSHEET_NAME)
+    except gspread.WorksheetNotFound:
+        worksheet = spreadsheet.add_worksheet(
+            title=WORKSHEET_NAME,
+            rows="1000",
+            cols="30"
+        )
+    return client, worksheet # Return both client and worksheet
 
 # --- 4. DATA ---
 AO_CATEGORIES =[
@@ -512,7 +528,13 @@ with st.container():
         "Estimer le prix et préparer l'offre financière",
         "Assurer la conformité documentaire",
         "Manque de ressources humaines dédiées",
+        "Autre", # Added "Autre" option here
     ], index=None, placeholder="Sélectionnez...")
+
+    # Conditionally show text input if "Autre" is selected for q_ao_pain
+    q_ao_pain_autre = ""
+    if q_ao_pain == "Autre":
+        q_ao_pain_autre = st.text_input("Veuillez préciser votre principal défi sur les Appels d'Offres *", placeholder="Décrivez votre défi...")
 
     q_ao_win_rate = st.selectbox("Quel est votre taux de succès estimé sur vos soumissions AO ?",[
         "Je ne sais pas / pas de suivi",
@@ -672,19 +694,23 @@ with st.container():
 if submitted:
     company_clean = company_name.strip().lower()
 
+    # Determine final_ao_pain value
+    final_ao_pain = q_ao_pain
+    if q_ao_pain == "Autre":
+        final_ao_pain = f"Autre: {q_ao_pain_autre.strip()}"
+
     required_fields =[
         company_name, secteur_entreprise, email, phone, city, effectif,
         age_entreprise, ca_range, role_respondant, tags, Email_Newsletter, 
         q_digital_tools, q_dream_automation
     ]
+    # Add q_ao_pain_autre to required fields if "Autre" is selected for q_ao_pain
+    if q_ao_pain == "Autre":
+        required_fields.append(q_ao_pain_autre)
 
     if not all(required_fields):
         st.error("⚠️ Veuillez remplir tous les champs obligatoires marqués d'un astérisque (*).")
         
-    # Vérification stricte si l'utilisateur a choisi "Autre"
-    elif q_top_pain == "Autre" and not q_top_pain_autre.strip():
-        st.error("⚠️ Vous avez sélectionné 'Autre' comme goulot d'étranglement. Veuillez préciser votre situation.")
-
     elif company_clean in FORBIDDEN_NAMES or len(company_clean) < 2:
         st.error("❌ Veuillez entrer un nom d'entreprise valide. Ce service est réservé aux structures B2B identifiées.")
 
@@ -694,28 +720,28 @@ if submitted:
     else:
         try:
             with st.spinner("Enregistrement en cours…"):
+                client_gs, worksheet_gs = init_google_sheets() # Get both client and worksheet
                 current_time       = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 secteurs_ao_str    = ", ".join(tags)
                 ai_tools_str       = ", ".join(q_ai_tools) if q_ai_tools else "Aucun"
                 
-                # BUG CORRIGÉ : q_digital_tools est maintenant un text_input (string), on ne fait plus de .join()
-                digital_tools_str  = q_digital_tools if q_digital_tools else "Aucun"
+                digital_tools_str  = q_digital_tools if q_digital_tools else "Non renseigné" # Ensure it's a string
                 
-                # Récupère la précision si "Autre" a été sélectionné
-                final_top_pain = f"Autre : {q_top_pain_autre}" if q_top_pain == "Autre" else q_top_pain
+                # Use the determined final_ao_pain
+                final_top_pain = q_top_pain 
                 
-                # VARIABLES SUPPRIMÉES : on garde les placeholders pour ne pas casser vos colonnes Google Sheets
-                q_decision_maker = "Non demandé (supprimé du form)"
-                q_source = "Non demandé (supprimé du form)"
+                # Removed placeholders, now they're just empty strings if the fields are truly gone
+                q_decision_maker = ""
+                q_source = ""
                 
-                # Création de la ligne "brute" (avec Email_Newsletter ajouté à la fin)
+                # Create the row list
                 raw_row =[
                     current_time, company_name, secteur_entreprise, ca_range,
                     age_entreprise, effectif, role_respondant,
                     website, city, email, phone,
                     secteurs_ao_str,
                     # AO Process
-                    q_ao_freq, q_ao_management, q_ao_time, q_ao_pain, q_ao_win_rate,
+                    q_ao_freq, q_ao_management, q_ao_time, final_ao_pain, q_ao_win_rate, # Use final_ao_pain here
                     # AI Maturity
                     q_ai_usage, ai_tools_str, q_lowcode, q_data_infra, digital_tools_str,
                     # Pain points
@@ -726,12 +752,11 @@ if submitted:
                     q_cps_ai, q_pilot, q_source, q_comment, Email_Newsletter
                 ]
                 
-                # Remplacement sécurisé des champs laissés vides (None ou "")
+                # Replacement sécurisé des champs laissés vides (None ou "")
                 row_to_insert =[str(val) if (val is not None and val != "") else "Non renseigné" for val in raw_row]
 
-                gc = init_google_sheets()
-                sheet = gc.open(GOOGLE_SHEET_NAME).sheet1
-                sheet.append_row(row_to_insert)
+                # Append the row to the worksheet
+                worksheet_gs.append_row(row_to_insert)
 
             st.success("✅ Inscription validée ! Vous recevrez vos premiers Appels d'Offres ciblés prochainement.")
             st.balloons()

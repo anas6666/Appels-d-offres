@@ -742,7 +742,7 @@ if submitted:
 # --- 8. FOOTER ---
 st.markdown("""
 <div class="footer-note">
-    Données traitées de façon confidentielle — aucune revente à des tiers.<br>
+    Conformité RGPD : vos données sont traitées de manière confidentielle — aucune revente à des tiers.<br>
     <strong>Morocco · Maroc</strong>
 </div>
 """, unsafe_allow_html=True)

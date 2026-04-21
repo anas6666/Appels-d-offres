@@ -380,7 +380,7 @@ FORBIDDEN_NAMES =[
 ]
 
 # --- 5. HERO ---
-st.markdown('<div class="hero-badge">🎯 Accès gratuit · B2B uniquement</div>', unsafe_allow_html=True)
+st.markdown('<div class="hero-badge">🎯 Accès gratuit </div>', unsafe_allow_html=True)
 st.markdown("""
 <div class="hero-title">
     Recevez vos Appels d'Offres<br><span>filtrés & automatisés.</span>

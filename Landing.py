@@ -618,12 +618,6 @@ with st.form("lead_gen_form", clear_on_submit=False):
         "Pas encore de budget alloué",
     ], index=None, placeholder="Sélectionnez...")
 
-    q_decision_maker = st.radio("Êtes-vous décisionnaire sur les achats technologiques ?",[
-        "Oui, décision finale",
-        "Je suis prescripteur (influence la décision)",
-        "Non, ce n'est pas mon périmètre",
-    ], index=None)
-
     q_barrier = st.selectbox("Principal frein à l'adoption de nouvelles technologies dans votre entreprise ?",[
         "Coût d'acquisition perçu comme élevé",
         "Complexité d'utilisation / manque de formation",

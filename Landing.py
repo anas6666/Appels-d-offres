@@ -548,15 +548,7 @@ with st.form("lead_gen_form", clear_on_submit=False):
         "Pas de gestion structurée",
     ], index=None)
 
-    q_digital_tools = st.multiselect("Quels outils digitaux sont déjà en place dans votre entreprise ?",[
-        "Suite Google Workspace", "Microsoft 365",
-        "Logiciel de comptabilité (Sage, Ciel…)",
-        "ERP / Odoo", "CRM (HubSpot, Salesforce, Zoho…)",
-        "Outil de gestion de projet (Trello, Asana, Monday…)",
-        "Signature électronique", "Portail client / extranet",
-        "Aucun outil spécifique",
-    ], placeholder="Sélectionnez les outils en place…")
-
+    q_digital_tools =  st.text_input("Quels outils digitaux sont déjà en place dans votre entreprise ? *", placeholder="")
     # ── BLOCK D : PAIN POINTS ──
     st.markdown("""
     <div class="section-divider">

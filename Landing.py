@@ -399,31 +399,20 @@ with st.form("lead_gen_form", clear_on_submit=False):
     ])
 
     # ── BLOCK B : AO TARGETING ──
-    st.markdown("""
-    <div class="ao-box">
-        <h4>🎯 Ciblage de vos Appels d'Offres</h4>
-        <p>Sélectionnez un ou plusieurs secteurs. Vous recevrez uniquement les AO correspondants, chaque matin par email.</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    tags = st.multiselect(
-        "Secteurs d'Appels d'Offres souhaités *",
-        options=AO_CATEGORIES,
-        label_visibility="collapsed",
-        placeholder="Choisissez vos secteurs cibles…"
-    )
-
-    ao_regions = st.multiselect(
-        "Régions géographiques cibles (optionnel)",
-        options=[
-            "Toutes régions", "Grand Casablanca-Settat", "Rabat-Salé-Kénitra",
-            "Marrakech-Safi", "Fès-Meknès", "Souss-Massa",
-            "Tanger-Tétouan-Al Hoceïma", "Oriental", "Béni Mellal-Khénifra",
-            "Drâa-Tafilalet", "Guelmim-Oued Noun", "Laâyoune-Sakia El Hamra", "Dakhla-Oued Ed-Dahab",
-        ],
-        placeholder="Par défaut : toutes les régions",
-    )
-
+    with st.container():
+        st.markdown("""
+        <div class="ao-box">
+            <h4>🎯 Ciblage de vos Appels d'Offres</h4>
+            <p>Sélectionnez un ou plusieurs secteurs. Vous recevrez uniquement les AO correspondants, chaque matin par email.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+        tags = st.multiselect(
+            "Secteurs d'Appels d'Offres souhaités *",
+            options=AO_CATEGORIES,
+            label_visibility="collapsed",
+            placeholder="Choisissez vos secteurs cibles…"
+        )
     # ── BLOCK C : CURRENT AO PROCESS ──
     st.markdown("""
     <div class="section-divider">

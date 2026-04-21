@@ -569,22 +569,7 @@ with st.container():
     </div>
     """, unsafe_allow_html=True)
 
-    q_top_pain = st.selectbox("Quel est votre principal goulot d'étranglement opérationnel en ce moment ?",[
-        "Veille et préparation des Appels d'Offres",
-        "Saisie manuelle des données (devis, factures, ERP)",
-        "Suivi commercial et relance client",
-        "Gestion documentaire et conformité (archivage, ISO)",
-        "Recrutement et tri des candidatures",
-        "Reporting & analyse de données",
-        "Communication interne et coordination d'équipes",
-        "Service client et support après-vente",
-        "Autre",
-    ], index=None, placeholder="Sélectionnez...")
-
-    # ----- CONDITION DYNAMIQUE : Apparaît uniquement si "Autre" est sélectionné -----
-    q_top_pain_autre = ""
-    if q_top_pain == "Autre":
-        q_top_pain_autre = st.text_input("Veuillez préciser votre goulot d'étranglement *", placeholder="Décrivez votre situation...")
+    q_top_pain = st.text_input("Quel est votre problèmes opérationnelles actuellement ? *", placeholder="Décrivez votre situation...")
 
     q_time_lost = st.selectbox("Combien d'heures par semaine estimez-vous perdre sur des tâches manuelles ?",[
         "Moins de 5 heures",

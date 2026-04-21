@@ -100,33 +100,6 @@ st.markdown("""
         margin-bottom: 2rem;
     }
 
-    /* ── ELEGANT IMAGE BANNER ── */
-    .hero-banner {
-        width: 100%;
-        height: 220px;
-        margin: 1.5rem 0 2.5rem 0;
-        border-radius: 16px;
-        /* Image d'analyse de documents + Calque dégradé rouge/orange */
-        background-image: 
-            linear-gradient(135deg, rgba(10,10,15,0.9) 0%, rgba(230,49,83,0.55) 50%, rgba(249,115,22,0.55) 100%),
-            url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1200&q=80');
-        background-size: cover;
-        background-position: center 30%;
-        border: 1px solid rgba(230,49,83,0.3);
-        box-shadow: 0 15px 40px rgba(230,49,83,0.15);
-        position: relative;
-    }
-    
-    /* Ombre interne pour lier l'image au fond sombre */
-    .hero-banner::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        border-radius: 16px;
-        background: radial-gradient(circle at center, transparent 0%, rgba(10,10,15,0.4) 100%);
-        pointer-events: none;
-    }
-
     .stat-row {
         display: flex;
         gap: 2rem;
@@ -427,10 +400,6 @@ st.markdown("""
     </ul>
     En échange, aidez-nous à cartographier la maturité digitale des entreprises marocaines.
 </div>
-
-<!-- IMAGE BANNER -->
-<div class="hero-banner"></div>
-
 """, unsafe_allow_html=True)
 
 st.markdown("""
@@ -600,22 +569,7 @@ with st.container():
     </div>
     """, unsafe_allow_html=True)
 
-    q_top_pain = st.selectbox("Quel est votre principal goulot d'étranglement opérationnel en ce moment ?",[
-        "Veille et préparation des Appels d'Offres",
-        "Saisie manuelle des données (devis, factures, ERP)",
-        "Suivi commercial et relance client",
-        "Gestion documentaire et conformité (archivage, ISO)",
-        "Recrutement et tri des candidatures",
-        "Reporting & analyse de données",
-        "Communication interne et coordination d'équipes",
-        "Service client et support après-vente",
-        "Autre",
-    ], index=None, placeholder="Sélectionnez...")
-
-    # ----- CONDITION DYNAMIQUE : Apparaît uniquement si "Autre" est sélectionné -----
-    q_top_pain_autre = ""
-    if q_top_pain == "Autre":
-        q_top_pain_autre = st.text_input("Veuillez préciser votre goulot d'étranglement *", placeholder="Décrivez votre situation...")
+    q_top_pain = st.text_input("Quel est votre problèmes opérationnelles actuellement ? *", placeholder="Décrivez votre situation...")
 
     q_time_lost = st.selectbox("Combien d'heures par semaine estimez-vous perdre sur des tâches manuelles ?",[
         "Moins de 5 heures",

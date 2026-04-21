@@ -325,7 +325,28 @@ FORBIDDEN_NAMES = [
     "test", "freelance", "particulier", "self employed", "independant",
     "indépendant", "x", "xxx", "-", "none", "null",
 ]
-
+SECTEURS_ENTREPRISE = sorted([
+    "Agriculture & Agroalimentaire",
+    "Automobile & Pièces détachées",
+    "Banque & Assurance",
+    "BTP & Construction",
+    "Chimie & Pharmacie",
+    "Commerce & Distribution",
+    "Conseil & Études",
+    "Éducation & Formation",
+    "Énergie & Environnement",
+    "Hôtellerie & Restauration",
+    "Immobilier & Promotion",
+    "Industrie Manufacturière",
+    "Informatique & Télécoms",
+    "Logistique & Transport",
+    "Marketing & Communication",
+    "Médias & Édition",
+    "Médical & Santé",
+    "Services aux Entreprises",
+    "Textile & Habillement",
+    "Tourisme & Loisirs",
+])
 # --- 5. HERO ---
 st.markdown('<div class="hero-badge">🎯 Accès gratuit</div>', unsafe_allow_html=True)
 st.markdown("""
@@ -362,7 +383,7 @@ with st.form("lead_gen_form", clear_on_submit=False):
     col1, col2 = st.columns(2)
     with col1:
         company_name     = st.text_input("Raison sociale *", placeholder="Ex: TargetUp SARL")
-        secteur_entreprise = st.text_input("Secteur d'activité principal *", placeholder="Ex: BTP, IT, Consulting…")
+        secteur_entreprise = st.selectbox("Secteur d'activité principal *", SECTEURS_ENTREPRISE)
         email            = st.text_input("Email professionnel *", placeholder="contact@entreprise.ma")
         phone            = st.text_input("Téléphone / WhatsApp *", placeholder="06 XX XX XX XX")
     with col2:

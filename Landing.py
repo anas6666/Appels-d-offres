@@ -424,27 +424,22 @@ with st.form("lead_gen_form", clear_on_submit=False):
     ])
 
     # ── BLOCK B : AO TARGETING (merged box) ──
-    st.markdown('<div class="ao-targeting-wrapper">', unsafe_allow_html=True)
-    st.markdown("""
-        <h4>🎯 Ciblage de vos Appels d'Offres</h4>
-        <p>Sélectionnez un ou plusieurs secteurs. Vous recevrez uniquement les AO correspondants, chaque matin par email.</p>
-    """, unsafe_allow_html=True)
-    tags = st.multiselect(
-        "Secteurs d'Appels d'Offres souhaités *",
-        options=AO_CATEGORIES,
-        label_visibility="collapsed",
-        placeholder="Choisissez vos secteurs cibles…"
-    )
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    # ── BLOCK C : CURRENT AO PROCESS ──
-    st.markdown("""
-    <div class="section-divider">
-        <div class="section-divider-line"></div>
-        <div class="section-divider-label">B · Processus Appels d'Offres actuel</div>
-        <div class="section-divider-line"></div>
-    </div>
-    """, unsafe_allow_html=True)
+    with st.container():
+        st.markdown('<div class="ao-targeting-wrapper">', unsafe_allow_html=True)
+    
+        st.markdown("""
+            <h4>🎯 Ciblage de vos Appels d'Offres</h4>
+            <p>Sélectionnez un ou plusieurs secteurs. Vous recevrez uniquement les AO correspondants, chaque matin par email.</p>
+        """, unsafe_allow_html=True)
+    
+        tags = st.multiselect(
+            "Secteurs d'Appels d'Offres souhaités *",
+            options=AO_CATEGORIES,
+            label_visibility="collapsed",
+            placeholder="Choisissez vos secteurs cibles…"
+        )
+    
+        st.markdown('</div>', unsafe_allow_html=True)
 
     q_ao_freq = st.selectbox("Combien d'AO soumettez-vous en moyenne par mois ?", [
         "Nous ne participons pas encore aux AO",

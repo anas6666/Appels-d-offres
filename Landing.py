@@ -314,6 +314,7 @@ st.markdown("""
 GOOGLE_SHEET_NAME = "Leads_Appels_Offres_Maroc"
 WORKSHEET_NAME = "Main" # Define worksheet name globally
 
+st.cache_resource.clear()
 @st.cache_resource
 def init_google_sheets():
     scopes = [

@@ -319,7 +319,7 @@ def init_google_sheets():
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive"
     ]
-    s_acc_info = st.secrets["gcp_service_account"]
+    s_acc_info = st.secrets["GOOGLE_SERVICE_ACCOUNT"]
     credentials = Credentials.from_service_account_info(s_acc_info, scopes=scopes)
     client = gspread.authorize(credentials)
     return client

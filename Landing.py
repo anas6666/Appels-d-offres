@@ -759,8 +759,6 @@ if submitted:
                 worksheet_gs.append_row(row_to_insert)
 
             st.success("✅ Inscription validée ! Vous recevrez vos premiers Appels d'Offres ciblés prochainement.")
-            st.balloons()
-
         except Exception as e:
             st.error(f"Une erreur est survenue lors de l'enregistrement. Réessayez ou contactez-nous. Détails : {e}")
 

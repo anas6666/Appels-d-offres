@@ -389,7 +389,7 @@ st.markdown("""
     Accédez aux marchés publics de <strong style="color:#e8e8f0">marchespublics.gov.ma</strong>, <strong style="color:#e8e8f0">Tanmia</strong>, <strong style="color:#e8e8f0">CDG</strong>, 
     <strong style="color:#e8e8f0">Bank Al-Maghrib</strong>, <strong style="color:#e8e8f0">ONCF</strong>, <strong style="color:#e8e8f0">RAM</strong>, <strong style="color:#e8e8f0">United Nations</strong>, ... directement dans votre boîte mail, filtrés selon votre secteur, <strong style="color:#e8e8f0">chaque matin à 8:00h.</strong> 
     <br>
-    <strong>Chaque appel d’offres inclut :</strong>
+    Chaque appel d’offres inclut :
     <ul>
       <li><strong style="color:#e8e8f0">Le nom du projet</strong></li>
       <li><strong style="color:#e8e8f0">La date limite</strong></li>
@@ -398,7 +398,7 @@ st.markdown("""
       <li><strong style="color:#e8e8f0">Le budget estimé</strong></li>
       <li><strong style="color:#e8e8f0">La caution</strong></li>
     </ul>
-    <br><br>
+    <br>
     En échange, aidez-nous à cartographier la maturité digitale des entreprises marocaines.
 </div>
 """, unsafe_allow_html=True)

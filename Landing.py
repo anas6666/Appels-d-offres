@@ -14,6 +14,7 @@ st.set_page_config(
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
 
     :root {
         --ink: #0a0a0f;
@@ -76,19 +77,21 @@ st.markdown("""
     .hero-title {
         font-family: 'Syne', sans-serif !important;
         font-size: 2.6rem !important;
-        font-weight: 800 !important;
-        line-height: 1.08 !important;
-        letter-spacing: -0.025em !important;
+        font-weight: 700 !important;            /* ← 700 instead of 800 */
+        line-height: 1.2 !important;            /* ← slightly more breathing room */
+        letter-spacing: -0.01em !important;     /* ← reduce negative tracking */
         color: #f1f1f8 !important;
         margin-bottom: 1rem !important;
         max-width: 600px;
+        text-rendering: optimizeLegibility;     /* improves rendering on some browsers */
     }
-
+    
     .hero-title span {
         background: linear-gradient(90deg, #e63153, #f97316);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+        font-weight: 700 !important;            /* match parent weight */
     }
 
     .hero-sub {

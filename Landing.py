@@ -149,7 +149,7 @@ st.markdown("""
         white-space: nowrap;
     }
 
-    /* ── AO TARGETING BOX (SOLUTION AVEC MARQUEUR CSS) ── */
+    /* ── AO TARGETING BOX ── */
     div.element-container:has(.ao-targeting-marker) {
         display: none !important;
     }
@@ -410,8 +410,8 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# --- 6. FORM ---
-with st.form("lead_gen_form", clear_on_submit=False):
+# --- 6. FORM (Utilisation de st.container pour l'interactivité dynamique) ---
+with st.container():
 
     # ── BLOCK A : ENTERPRISE INFO ──
     st.markdown("""
@@ -559,6 +559,7 @@ with st.form("lead_gen_form", clear_on_submit=False):
     ], index=None)
 
     q_digital_tools =  st.text_input("Quels outils digitaux sont déjà en place dans votre entreprise ? *", placeholder="")
+    
     # ── BLOCK D : PAIN POINTS ──
     st.markdown("""
     <div class="section-divider">
@@ -579,6 +580,11 @@ with st.form("lead_gen_form", clear_on_submit=False):
         "Service client et support après-vente",
         "Autre",
     ], index=None, placeholder="Sélectionnez...")
+
+    # ----- CONDITION DYNAMIQUE : Apparaît uniquement si "Autre" est sélectionné -----
+    q_top_pain_autre = ""
+    if q_top_pain == "Autre":
+        q_top_pain_autre = st.text_input("Veuillez préciser votre goulot d'étranglement *", placeholder="Décrivez votre situation...")
 
     q_time_lost = st.selectbox("Combien d'heures par semaine estimez-vous perdre sur des tâches manuelles ?",[
         "Moins de 5 heures",
@@ -672,7 +678,7 @@ with st.form("lead_gen_form", clear_on_submit=False):
         height=80,
     )
 
-    submitted = st.form_submit_button(
+    submitted = st.button(
         "✦  Activer mes alertes AO personnalisées",
         use_container_width=True
     )
@@ -681,14 +687,18 @@ with st.form("lead_gen_form", clear_on_submit=False):
 if submitted:
     company_clean = company_name.strip().lower()
 
-    # Mise à jour de la validation : On vérifie TOUS les champs ayant un astérisque (*)
     required_fields =[
         company_name, secteur_entreprise, email, phone, city, effectif,
-        age_entreprise, ca_range, role_respondant, tags, q_dream_automation
+        age_entreprise, ca_range, role_respondant, tags, Email_Newsletter, 
+        q_digital_tools, q_dream_automation
     ]
 
     if not all(required_fields):
         st.error("⚠️ Veuillez remplir tous les champs obligatoires marqués d'un astérisque (*).")
+        
+    # Vérification stricte si l'utilisateur a choisi "Autre"
+    elif q_top_pain == "Autre" and not q_top_pain_autre.strip():
+        st.error("⚠️ Vous avez sélectionné 'Autre' comme goulot d'étranglement. Veuillez préciser votre situation.")
 
     elif company_clean in FORBIDDEN_NAMES or len(company_clean) < 2:
         st.error("❌ Veuillez entrer un nom d'entreprise valide. Ce service est réservé aux structures B2B identifiées.")
@@ -702,9 +712,18 @@ if submitted:
                 current_time       = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 secteurs_ao_str    = ", ".join(tags)
                 ai_tools_str       = ", ".join(q_ai_tools) if q_ai_tools else "Aucun"
-                digital_tools_str  = ", ".join(q_digital_tools) if q_digital_tools else "Aucun"
                 
-                # Création de la ligne "brute"
+                # BUG CORRIGÉ : q_digital_tools est maintenant un text_input (string), on ne fait plus de .join()
+                digital_tools_str  = q_digital_tools if q_digital_tools else "Aucun"
+                
+                # Récupère la précision si "Autre" a été sélectionné
+                final_top_pain = f"Autre : {q_top_pain_autre}" if q_top_pain == "Autre" else q_top_pain
+                
+                # VARIABLES SUPPRIMÉES : on garde les placeholders pour ne pas casser vos colonnes Google Sheets
+                q_decision_maker = "Non demandé (supprimé du form)"
+                q_source = "Non demandé (supprimé du form)"
+                
+                # Création de la ligne "brute" (avec Email_Newsletter ajouté à la fin)
                 raw_row =[
                     current_time, company_name, secteur_entreprise, ca_range,
                     age_entreprise, effectif, role_respondant,
@@ -715,11 +734,11 @@ if submitted:
                     # AI Maturity
                     q_ai_usage, ai_tools_str, q_lowcode, q_data_infra, digital_tools_str,
                     # Pain points
-                    q_top_pain, q_time_lost, q_priority_dept, q_existing_automation, q_dream_automation,
+                    final_top_pain, q_time_lost, q_priority_dept, q_existing_automation, q_dream_automation,
                     # Budget & decision
                     q_budget, q_decision_maker, q_barrier, q_timeline,
                     # Interest
-                    q_cps_ai, q_pilot, q_source, q_comment,
+                    q_cps_ai, q_pilot, q_source, q_comment, Email_Newsletter
                 ]
                 
                 # Remplacement sécurisé des champs laissés vides (None ou "")

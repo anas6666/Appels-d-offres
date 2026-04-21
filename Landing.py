@@ -327,14 +327,14 @@ FORBIDDEN_NAMES = [
 ]
 
 # --- 5. HERO ---
-st.markdown('<div class="hero-badge">🎯 Accès gratuit · B2B uniquement</div>', unsafe_allow_html=True)
+st.markdown('<div class="hero-badge">🎯 Accès gratuit</div>', unsafe_allow_html=True)
 st.markdown("""
 <div class="hero-title">
     Recevez vos Appels d'Offres<br><span>filtrés & automatisés.</span>
 </div>
 <div class="hero-sub">
     Accédez aux marchés publics de <strong style="color:#e8e8f0">marchespublics.gov.ma</strong>, <strong style="color:#e8e8f0">Tanmia</strong>, <strong style="color:#e8e8f0">CDG</strong>, 
-    <strong style="color:#e8e8f0">Bank Al-Maghrib</strong>, <strong style="color:#e8e8f0">ONCF</strong>, <strong style="color:#e8e8f0">RAM</strong>, <strong style="color:#e8e8f0">United Nations</strong>,... directement dans votre boîte mail, filtrés selon votre secteur, <strong style="color:#e8e8f0">chaque matin à 8:00h.</strong> 
+    <strong style="color:#e8e8f0">Bank Al-Maghrib</strong>, <strong style="color:#e8e8f0">ONCF</strong>, <strong style="color:#e8e8f0">RAM</strong>, <strong style="color:#e8e8f0">United Nations</strong>, ... directement dans votre boîte mail, filtrés selon votre secteur, <strong style="color:#e8e8f0">chaque matin à 8:00h.</strong> 
     <br>En échange, aidez-nous à cartographier la maturité digitale des entreprises marocaines.
 </div>
 """, unsafe_allow_html=True)

@@ -312,7 +312,7 @@ st.markdown("""
 
 # --- 3. GOOGLE SHEETS SETUP ---
 GOOGLE_SHEET_NAME = "Leads_Appels_Offres_Maroc"
-WORKSHEET_NAME = "Main" # Define worksheet name globally
+WORKSHEET_NAME = "Main1" # Define worksheet name globally
 
 st.cache_resource.clear()
 @st.cache_resource

@@ -3,76 +3,267 @@ import gspread
 from google.oauth2.service_account import Credentials
 from datetime import datetime
 
-# --- 1. CONFIGURATION DE LA PAGE ---
+# --- 1. PAGE CONFIG ---
 st.set_page_config(
-    page_title="Portail des Appels d'Offres & Innovation",
+    page_title="Portail AO | TargetUp Intelligence",
+    page_icon="🎯",
     layout="centered"
 )
 
-# --- 2. INJECTION CSS (ANIMATIONS & DESIGN ÉPURÉ) ---
+# --- 2. CSS ---
 st.markdown("""
-    <style>
-        /* Animation d'apparition fluide */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        div.block-container {
-            animation: fadeIn 0.8s ease-out;
-            font-family: 'Inter', sans-serif;
-        }
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
 
-        /* Section Appels d'offres au milieu */
-        .ao-highlight {
-            background-color: #f8f9fc;
-            border-left: 3px solid #e11d48; /* Couleur rouge subtile/moderne pour attirer l'attention */
-            padding: 20px 25px;
-            border-radius: 6px;
-            margin-top: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
-            transition: all 0.3s ease;
-        }
-        .ao-highlight:hover {
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
-            transform: translateY(-2px);
-        }
-        .ao-highlight h3 {
-            color: #1e293b;
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-        .ao-highlight p {
-            color: #64748b;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-        }
+    :root {
+        --ink: #0a0a0f;
+        --ink2: #14141e;
+        --surface: #13131d;
+        --border: rgba(255,255,255,0.07);
+        --muted: #6b7280;
+        --accent: #e63153;
+        --accent2: #f97316;
+        --text: #e8e8f0;
+        --text-soft: #9ca3af;
+    }
 
-        /* Boutons */
-        .stButton>button {
-            transition: all 0.3s ease-in-out;
-            border-radius: 6px;
-            background-color: #0f172a;
-            color: white;
-        }
-        .stButton>button:hover {
-            transform: scale(1.02);
-            background-color: #1e293b;
-            color: white;
-        }
-        
-        /* Titres de section */
-        .section-title {
-            font-weight: 600;
-            color: #0f172a;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 8px;
-        }
-    </style>
+    /* ── GLOBAL RESET ── */
+    html, body, [class*="css"] {
+        background-color: var(--ink) !important;
+        color: var(--text) !important;
+        font-family: 'DM Sans', sans-serif !important;
+    }
+
+    .main .block-container {
+        max-width: 780px;
+        padding: 3rem 2rem 6rem;
+        animation: pageIn 0.9s cubic-bezier(0.16,1,0.3,1) both;
+    }
+
+    @keyframes pageIn {
+        from { opacity: 0; transform: translateY(24px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── HERO ── */
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(230,49,83,0.12);
+        border: 1px solid rgba(230,49,83,0.3);
+        color: #f87196;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        padding: 5px 14px;
+        border-radius: 999px;
+        margin-bottom: 1.4rem;
+    }
+
+    .hero-title {
+        font-family: 'Syne', sans-serif !important;
+        font-size: clamp(2rem, 5vw, 3.1rem) !important;
+        font-weight: 800 !important;
+        line-height: 1.1 !important;
+        letter-spacing: -0.02em !important;
+        color: #f1f1f8 !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .hero-title span {
+        background: linear-gradient(90deg, #e63153, #f97316);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .hero-sub {
+        font-size: 1.05rem;
+        color: var(--text-soft);
+        line-height: 1.65;
+        max-width: 560px;
+        margin-bottom: 2rem;
+    }
+
+    .stat-row {
+        display: flex;
+        gap: 2rem;
+        margin: 1.8rem 0 2.5rem;
+        flex-wrap: wrap;
+    }
+    .stat-item {
+        display: flex;
+        flex-direction: column;
+    }
+    .stat-num {
+        font-family: 'Syne', sans-serif;
+        font-size: 1.9rem;
+        font-weight: 800;
+        background: linear-gradient(90deg, #e63153, #f97316);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
+    }
+    .stat-label {
+        font-size: 0.78rem;
+        color: var(--text-soft);
+        margin-top: 3px;
+        letter-spacing: 0.03em;
+    }
+
+    /* ── DIVIDER ── */
+    .section-divider {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin: 2.5rem 0 1.5rem;
+    }
+    .section-divider-line {
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+    }
+    .section-divider-label {
+        font-family: 'Syne', sans-serif;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--muted);
+        white-space: nowrap;
+    }
+
+    /* ── AO HIGHLIGHT ── */
+    .ao-box {
+        background: linear-gradient(135deg, rgba(230,49,83,0.08) 0%, rgba(249,115,22,0.05) 100%);
+        border: 1px solid rgba(230,49,83,0.2);
+        border-left: 3px solid var(--accent);
+        padding: 22px 26px;
+        border-radius: 10px;
+        margin: 1.5rem 0;
+        position: relative;
+        overflow: hidden;
+        transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+    .ao-box::before {
+        content: '';
+        position: absolute;
+        top: -30px; right: -30px;
+        width: 100px; height: 100px;
+        background: radial-gradient(circle, rgba(230,49,83,0.15), transparent 70%);
+        pointer-events: none;
+    }
+    .ao-box:hover {
+        box-shadow: 0 8px 32px rgba(230,49,83,0.12);
+        transform: translateY(-2px);
+    }
+    .ao-box h4 {
+        font-family: 'Syne', sans-serif;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #f87196;
+        margin: 0 0 6px;
+    }
+    .ao-box p {
+        font-size: 0.88rem;
+        color: var(--text-soft);
+        margin: 0;
+        line-height: 1.6;
+    }
+
+    /* ── INPUTS ── */
+    .stTextInput > div > div > input,
+    .stTextArea > div > div > textarea,
+    .stSelectbox > div > div,
+    .stMultiSelect > div > div {
+        background: var(--surface) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 8px !important;
+        color: var(--text) !important;
+        font-family: 'DM Sans', sans-serif !important;
+        font-size: 0.92rem !important;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+    }
+    .stTextInput > div > div > input:focus,
+    .stTextArea > div > div > textarea:focus {
+        border-color: rgba(230,49,83,0.5) !important;
+        box-shadow: 0 0 0 3px rgba(230,49,83,0.1) !important;
+    }
+
+    /* Labels */
+    label, .stRadio > label, .stCheckbox > label {
+        color: var(--text-soft) !important;
+        font-size: 0.85rem !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.01em !important;
+    }
+
+    /* Radio buttons */
+    .stRadio > div {
+        gap: 6px !important;
+    }
+    .stRadio > div > label {
+        background: var(--surface) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 8px !important;
+        padding: 10px 16px !important;
+        transition: border-color 0.2s ease, background 0.2s ease !important;
+        color: var(--text) !important;
+        font-size: 0.88rem !important;
+        cursor: pointer;
+    }
+    .stRadio > div > label:hover {
+        border-color: rgba(230,49,83,0.4) !important;
+        background: rgba(230,49,83,0.05) !important;
+    }
+
+    /* ── SUBMIT BUTTON ── */
+    .stFormSubmitButton > button, .stButton > button {
+        background: linear-gradient(135deg, #e63153 0%, #c91d41 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 10px !important;
+        padding: 14px 28px !important;
+        font-family: 'Syne', sans-serif !important;
+        font-size: 0.95rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.04em !important;
+        text-transform: uppercase !important;
+        transition: all 0.25s ease !important;
+        box-shadow: 0 4px 20px rgba(230,49,83,0.3) !important;
+        width: 100% !important;
+        margin-top: 1.5rem !important;
+    }
+    .stFormSubmitButton > button:hover, .stButton > button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 30px rgba(230,49,83,0.45) !important;
+        background: linear-gradient(135deg, #f0365a 0%, #d42246 100%) !important;
+    }
+
+    /* ── SUCCESS / ERROR ── */
+    .stAlert {
+        border-radius: 10px !important;
+        border-left-width: 3px !important;
+        font-family: 'DM Sans', sans-serif !important;
+    }
+
+    /* ── FOOTER ── */
+    .footer-note {
+        text-align: center;
+        font-size: 0.78rem;
+        color: var(--muted);
+        margin-top: 3rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border);
+    }
+
+    /* ── Streamlit chrome cleanup ── */
+    #MainMenu, footer, header { visibility: hidden !important; }
+    .stDeployButton { display: none !important; }
+</style>
 """, unsafe_allow_html=True)
 
 # --- 3. GOOGLE SHEETS SETUP ---
@@ -80,7 +271,7 @@ GOOGLE_SHEET_NAME = "Leads_Appels_Offres_Maroc"
 
 @st.cache_resource
 def init_google_sheets():
-    scopes =[
+    scopes = [
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive"
     ]
@@ -89,125 +280,411 @@ def init_google_sheets():
     client = gspread.authorize(credentials)
     return client
 
-# --- 4. LISTES & FILTRES ---
-AO_CATEGORIES =[
-    "Constructions & Gros Œuvre", "Génie Civil & Infrastructures", 
+# --- 4. DATA ---
+AO_CATEGORIES = [
+    "Constructions & Gros Œuvre", "Génie Civil & Infrastructures",
     "Aménagement & Finition", "Électricité & Plomberie",
-    "Nettoyage & Entretien", "Gardiennage & Sécurité", "Transport & Logistique",
-    "Recrutement & Intérim", "Consulting & Audit", "Formation & Coaching",
-    "IT Matériel & Réseau", "IT Logiciel & Digital", "Archivage & Numérisation",
-    "Fournitures de Bureau & Impression", "Matériel Médical & Laboratoire",
-    "Agroalimentaire & Restauration", "Événementiel & Communication",
-    "Développement Social & ONG"
+    "Nettoyage & Entretien", "Gardiennage & Sécurité",
+    "Transport & Logistique", "Recrutement & Intérim",
+    "Consulting & Audit", "Formation & Coaching",
+    "IT Matériel & Réseau", "IT Logiciel & Digital",
+    "Archivage & Numérisation", "Fournitures de Bureau & Impression",
+    "Matériel Médical & Laboratoire", "Agroalimentaire & Restauration",
+    "Événementiel & Communication", "Développement Social & ONG",
+    "Énergie & Environnement", "Immobilier & Promotion",
+    "Santé & Pharmaceutique", "Juridique & Notarial",
+    "Agriculture & Irrigation", "Télécommunications",
 ]
 
-FORBIDDEN_NAMES =[
-    "n/a", "na", "anonyme", "confidentiel", "secret", "aucun", "rien", 
-    "test", "freelance", "particulier", "self employed", "independant", 
-    "indépendant", "x", "xxx", "-"
+MOROCCAN_CITIES = [
+    "Casablanca", "Rabat", "Marrakech", "Tanger", "Agadir",
+    "Fès", "Meknès", "Oujda", "Béni Mellal", "Nador",
+    "Tétouan", "El Jadida", "Safi", "Kénitra", "Mohammadia",
+    "Khouribga", "Settat", "Laâyoune", "Dakhla", "Errachidia",
+    "Ifrane", "Khénifra", "Taza", "Tiznit", "Ouarzazate",
+    "Al Hoceïma", "Larache", "Guelmim", "Berrechid", "Salé",
+    "Temara", "Ain Sebaa", "Hay Hassani", "Autre",
 ]
 
-# --- 5. HEADER ---
-st.title("Recevez vos Appels d'Offres Filtrés")
+FORBIDDEN_NAMES = [
+    "n/a", "na", "anonyme", "confidentiel", "secret", "aucun", "rien",
+    "test", "freelance", "particulier", "self employed", "independant",
+    "indépendant", "x", "xxx", "-", "none", "null",
+]
+
+# --- 5. HERO ---
+st.markdown('<div class="hero-badge">🎯 Accès gratuit · B2B uniquement</div>', unsafe_allow_html=True)
 st.markdown("""
-Gagnez des heures de recherche chaque semaine. Recevez les appels d'offres de *marchespublics.gov.ma* et *Tanmia* directement dans votre boîte de réception, triés selon votre secteur d'activité.
+<div class="hero-title">
+    Recevez vos Appels d'Offres<br><span>filtrés & automatisés.</span>
+</div>
+<div class="hero-sub">
+    Accédez aux marchés publics de <strong style="color:#e8e8f0">marchespublics.gov.ma</strong> et <strong style="color:#e8e8f0">Tanmia</strong> directement dans votre boîte mail — filtrés selon votre secteur, chaque matin. En échange, aidez-nous à cartographier la maturité digitale des entreprises marocaines.
+</div>
+""", unsafe_allow_html=True)
 
-*En contrepartie de cet accès gratuit réservé aux entreprises, nous vous demandons de répondre à un bref questionnaire.*
-""")
+st.markdown("""
+<div class="stat-row">
+    <div class="stat-item"><div class="stat-num">2 400+</div><div class="stat-label">AO publiés chaque mois</div></div>
+    <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">Gratuit pour les entreprises</div></div>
+    <div class="stat-item"><div class="stat-num">&lt; 2 min</div><div class="stat-label">Pour paramétrer vos alertes</div></div>
+</div>
+""", unsafe_allow_html=True)
 
-# --- 6. FORMULAIRE ---
-with st.form("lead_gen_form"):
-    
-    st.markdown('<div class="section-title">1. Informations de l\'Entreprise</div>', unsafe_allow_html=True)
-    
+# --- 6. FORM ---
+with st.form("lead_gen_form", clear_on_submit=False):
+
+    # ── BLOCK A : ENTERPRISE INFO ──
+    st.markdown("""
+    <div class="section-divider">
+        <div class="section-divider-line"></div>
+        <div class="section-divider-label">A · Identification de l'entreprise</div>
+        <div class="section-divider-line"></div>
+    </div>
+    """, unsafe_allow_html=True)
+
     col1, col2 = st.columns(2)
     with col1:
-        company_name = st.text_input("Nom de l'entreprise *", placeholder="Ex: TargetUp SARL")
-        secteur_entreprise = st.text_input("Secteur d'activité de l'entreprise *", placeholder="Ex: BTP, Consulting, IT...")
-        email = st.text_input("Email professionnel *", placeholder="contact@entreprise.ma")
-        
+        company_name     = st.text_input("Raison sociale *", placeholder="Ex: TargetUp SARL")
+        secteur_entreprise = st.text_input("Secteur d'activité principal *", placeholder="Ex: BTP, IT, Consulting…")
+        email            = st.text_input("Email professionnel *", placeholder="contact@entreprise.ma")
+        phone            = st.text_input("Téléphone / WhatsApp *", placeholder="06 XX XX XX XX")
     with col2:
-        city = st.selectbox("Ville *",["Casablanca", "Rabat", "Marrakech", "Tanger", "Agadir", "Fès", "Béni Mellal", "Oujda", "Autre"])
-        phone = st.text_input("Téléphone (WhatsApp) *", placeholder="06 XX XX XX XX")
-        website = st.text_input("Site web (Optionnel)", placeholder="www.entreprise.ma")
-        
-    # --- MIDDLE SECTION: AO SELECTION ---
-    st.markdown("""
-        <div class="ao-highlight">
-            <h3 style='color: #e11d48;'>🎯 Ciblage de vos Appels d'Offres</h3>
-            <p>Sélectionnez les secteurs précis que vous souhaitez recevoir quotidiennement par email.</p>
-        </div>
-    """, unsafe_allow_html=True)
-    
-    tags = st.multiselect(
-        "Secteurs d'Appels d'Offres souhaités *", 
-        options=AO_CATEGORIES,
-        label_visibility="collapsed"
-    )
-    
-    st.markdown('<div class="section-title">2. Étude de marché : L\'IA & l\'Automatisation</div>', unsafe_allow_html=True)
-    
-    q1_usage = st.selectbox("1. À quelle fréquence utilisez-vous l'Intelligence Artificielle aujourd'hui ?",["Jamais", "Rarement (quelques tests isolés)", "Régulièrement (rédaction, e-mails, recherche)", "Pleinement intégrée dans nos processus"])
-    q2_lowcode = st.radio("2. Connaissez-vous les outils d'automatisation 'Low-Code' (Zapier, Make.com, n8n) ?",["Non", "Oui de nom, mais sans utilisation", "Oui, nous les utilisons activement"])
-    q3_problem = st.selectbox("3. Quel est votre principal goulot d'étranglement administratif/opérationnel ?",["La veille et la préparation des Appels d'Offres", "La saisie manuelle des données (Devis, Factures, ERP)", "Le suivi commercial et la relance client", "La gestion de la conformité documentaire (Archivage, ISO)", "Le recrutement et tri des CVs", "Autre"])
-    q4_time_lost = st.selectbox("4. Combien d'heures par semaine estimez-vous perdre sur des tâches manuelles et répétitives ?",["Moins de 5 heures", "Entre 5 et 10 heures", "Entre 10 et 20 heures", "Plus de 20 heures par semaine"])
-    q5_budget = st.selectbox("5. Quel est votre budget annuel alloué à la digitalisation et aux logiciels métiers ?",["Moins de 10 000 DH", "Entre 10 000 DH et 50 000 DH", "Entre 50 000 DH et 200 000 DH", "Plus de 200 000 DH"])
-    q6_barrier = st.selectbox("6. Quel est le principal frein à l'adoption de nouvelles technologies dans votre entreprise ?",["Le coût d'acquisition", "La complexité d'utilisation et le manque de formation", "Le temps nécessaire pour la mise en place", "La résistance au changement des équipes", "Nous n'avons pas de frein majeur"])
-    q7_ao_management = st.radio("7. Comment gérez-vous actuellement vos soumissions aux Appels d'Offres ?",["Processus entièrement manuel", "Une équipe/personne dédiée à 100%", "Nous sous-traitons la recherche", "Nous avons un logiciel interne"])
-    q8_premium_interest = st.radio("8. Seriez-vous intéressé par une IA qui lit le CPS à votre place et extrait le Dossier Technique ?",["Pas intéressé", "Oui, si c'est gratuit", "Oui, je serais prêt à payer un abonnement pour cette fonctionnalité"])
-    q9_pilot = st.radio("9. Seriez-vous ouvert à tester une automatisation sur-mesure (Proof of Concept) gratuitement ?",["Oui, absolument", "Peut-être, à voir selon la proposition", "Non, pas pour le moment"])
-    q10_automate_task = st.text_area("10. Si l'IA pouvait exécuter UNE seule tâche à votre place dès demain, quelle serait-elle ? *", placeholder="Ex: Extraire les lignes des factures fournisseurs et les envoyer sur notre ERP...")
-    
-    # Submit
-    submitted = st.form_submit_button("S'inscrire et paramétrer mes alertes", use_container_width=True)
+        city             = st.selectbox("Ville du siège *", MOROCCAN_CITIES)
+        effectif         = st.selectbox("Effectif de l'entreprise *", [
+            "Auto-entrepreneur / TPE (1-5 personnes)",
+            "Petite entreprise (6-20 personnes)",
+            "Moyenne entreprise (21-100 personnes)",
+            "Grande entreprise (100-500 personnes)",
+            "Groupe / Holding (500+ personnes)",
+        ])
+        age_entreprise   = st.selectbox("Ancienneté de l'entreprise *", [
+            "Moins d'un an", "1 à 3 ans", "3 à 7 ans", "7 à 15 ans", "Plus de 15 ans"
+        ])
+        website          = st.text_input("Site web (optionnel)", placeholder="www.entreprise.ma")
 
-# --- 7. VALIDATION, SOUMISSION & SAUVEGARDE ---
+    ca_range = st.selectbox("Chiffre d'affaires annuel estimé *", [
+        "Moins de 500 000 DH",
+        "500 000 – 2 000 000 DH",
+        "2 000 000 – 10 000 000 DH",
+        "10 000 000 – 50 000 000 DH",
+        "Plus de 50 000 000 DH",
+        "Préfère ne pas répondre",
+    ])
+
+    role_respondant = st.selectbox("Votre fonction dans l'entreprise *", [
+        "Dirigeant / PDG / Associé",
+        "Directeur général ou adjoint",
+        "Directeur commercial / Business developer",
+        "Responsable administratif & financier",
+        "Responsable IT / DSI",
+        "Chef de projet / Manager",
+        "Autre",
+    ])
+
+    # ── BLOCK B : AO TARGETING ──
+    st.markdown("""
+    <div class="ao-box">
+        <h4>🎯 Ciblage de vos Appels d'Offres</h4>
+        <p>Sélectionnez un ou plusieurs secteurs. Vous recevrez uniquement les AO correspondants, chaque matin par email.</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    tags = st.multiselect(
+        "Secteurs d'Appels d'Offres souhaités *",
+        options=AO_CATEGORIES,
+        label_visibility="collapsed",
+        placeholder="Choisissez vos secteurs cibles…"
+    )
+
+    ao_regions = st.multiselect(
+        "Régions géographiques cibles (optionnel)",
+        options=[
+            "Toutes régions", "Grand Casablanca-Settat", "Rabat-Salé-Kénitra",
+            "Marrakech-Safi", "Fès-Meknès", "Souss-Massa",
+            "Tanger-Tétouan-Al Hoceïma", "Oriental", "Béni Mellal-Khénifra",
+            "Drâa-Tafilalet", "Guelmim-Oued Noun", "Laâyoune-Sakia El Hamra", "Dakhla-Oued Ed-Dahab",
+        ],
+        placeholder="Par défaut : toutes les régions",
+    )
+
+    # ── BLOCK C : CURRENT AO PROCESS ──
+    st.markdown("""
+    <div class="section-divider">
+        <div class="section-divider-line"></div>
+        <div class="section-divider-label">B · Processus Appels d'Offres actuel</div>
+        <div class="section-divider-line"></div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    q_ao_freq = st.selectbox("Combien d'AO soumettez-vous en moyenne par mois ?", [
+        "Nous ne participons pas encore aux AO",
+        "1 à 3 AO/mois", "4 à 10 AO/mois", "Plus de 10 AO/mois",
+    ])
+
+    q_ao_management = st.radio("Comment gérez-vous actuellement votre veille AO ?", [
+        "Recherche manuelle et irrégulière",
+        "Une personne dédiée à la veille",
+        "Abonnement à un service de veille",
+        "Pas de veille structurée",
+    ])
+
+    q_ao_time = st.selectbox("Combien de temps passez-vous à préparer un dossier de soumission ?", [
+        "Moins de 2 jours",
+        "2 à 5 jours ouvrés",
+        "1 à 2 semaines",
+        "Plus de 2 semaines",
+    ])
+
+    q_ao_pain = st.selectbox("Quel est votre principal défi sur les Appels d'Offres ?", [
+        "Trouver les AO pertinents à temps",
+        "Lire et comprendre le CPS (Cahier des Prescriptions Spéciales)",
+        "Constituer le dossier administratif",
+        "Estimer le prix et préparer l'offre financière",
+        "Assurer la conformité documentaire",
+        "Manque de ressources humaines dédiées",
+    ])
+
+    q_ao_win_rate = st.selectbox("Quel est votre taux de succès estimé sur vos soumissions AO ?", [
+        "Je ne sais pas / pas de suivi",
+        "Moins de 10%", "10% à 25%", "25% à 50%", "Plus de 50%",
+    ])
+
+    # ── BLOCK D : AI & DIGITAL MATURITY ──
+    st.markdown("""
+    <div class="section-divider">
+        <div class="section-divider-line"></div>
+        <div class="section-divider-label">C · Maturité IA & Digitale</div>
+        <div class="section-divider-line"></div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    q_ai_usage = st.selectbox("À quelle fréquence utilisez-vous l'Intelligence Artificielle en entreprise ?", [
+        "Jamais — nous n'avons pas encore exploré",
+        "Quelques tests individuels (ChatGPT personnel…)",
+        "Utilisation régulière sur certains postes (rédaction, recherche)",
+        "IA intégrée dans au moins un processus métier",
+        "IA centrale dans notre stratégie opérationnelle",
+    ])
+
+    q_ai_tools = st.multiselect("Quels outils IA utilisez-vous actuellement ? (plusieurs choix possibles)", [
+        "ChatGPT / GPT-4", "Claude (Anthropic)", "Gemini (Google)",
+        "Copilot (Microsoft)", "Midjourney / DALL-E (images)",
+        "Outils IA intégrés dans des logiciels métiers",
+        "IA développée en interne", "Aucun outil IA pour l'instant",
+    ], placeholder="Sélectionnez…")
+
+    q_lowcode = st.radio("Connaissez-vous les outils d'automatisation Low-Code (n8n, Make, Zapier…) ?", [
+        "Non, première fois que j'en entends parler",
+        "Oui de nom, mais sans utilisation concrète",
+        "Oui, nous les utilisons occasionnellement",
+        "Oui, ils sont intégrés dans nos processus",
+    ])
+
+    q_data_infra = st.radio("Comment gérez-vous vos données clients et opérationnelles ?", [
+        "Fichiers Excel / Google Sheets uniquement",
+        "CRM basique (HubSpot free, Zoho…)",
+        "ERP ou CRM avancé (Odoo, SAP, Dynamics…)",
+        "Base de données ou infra BI dédiée",
+        "Pas de gestion structurée",
+    ])
+
+    q_digital_tools = st.multiselect("Quels outils digitaux sont déjà en place dans votre entreprise ?", [
+        "Suite Google Workspace", "Microsoft 365",
+        "Logiciel de comptabilité (Sage, Ciel…)",
+        "ERP / Odoo", "CRM (HubSpot, Salesforce, Zoho…)",
+        "Outil de gestion de projet (Trello, Asana, Monday…)",
+        "Signature électronique", "Portail client / extranet",
+        "Aucun outil spécifique",
+    ], placeholder="Sélectionnez les outils en place…")
+
+    # ── BLOCK E : PAIN POINTS ──
+    st.markdown("""
+    <div class="section-divider">
+        <div class="section-divider-line"></div>
+        <div class="section-divider-label">D · Points de friction & opportunités</div>
+        <div class="section-divider-line"></div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    q_top_pain = st.selectbox("Quel est votre principal goulot d'étranglement opérationnel en ce moment ?", [
+        "Veille et préparation des Appels d'Offres",
+        "Saisie manuelle des données (devis, factures, ERP)",
+        "Suivi commercial et relance client",
+        "Gestion documentaire et conformité (archivage, ISO)",
+        "Recrutement et tri des candidatures",
+        "Reporting & analyse de données",
+        "Communication interne et coordination d'équipes",
+        "Service client et support après-vente",
+        "Autre",
+    ])
+
+    q_time_lost = st.selectbox("Combien d'heures par semaine estimez-vous perdre sur des tâches manuelles ?", [
+        "Moins de 5 heures",
+        "5 à 10 heures",
+        "10 à 20 heures",
+        "Plus de 20 heures par semaine",
+    ])
+
+    q_priority_dept = st.selectbox("Quel département bénéficierait le plus d'une automatisation ?", [
+        "Commercial & Business Development",
+        "Administration & Finances",
+        "Opérations & Production",
+        "RH & Recrutement",
+        "IT & Systèmes",
+        "Direction Générale",
+        "Juridique & Conformité",
+    ])
+
+    q_existing_automation = st.radio("Avez-vous déjà automatisé un processus dans votre entreprise ?", [
+        "Non, tout est encore manuel",
+        "Oui, quelques automatisations simples (alertes, rappels…)",
+        "Oui, des workflows complets sont automatisés",
+        "Oui, nous avons une stratégie d'automatisation active",
+    ])
+
+    q_dream_automation = st.text_area(
+        "Si l'IA pouvait exécuter UNE seule tâche à votre place dès demain, laquelle serait-elle ? *",
+        placeholder="Ex: Analyser automatiquement les CPS et me sortir un résumé en 5 points clés avec les dates limites…",
+        height=90,
+    )
+
+    # ── BLOCK F : BUDGET & STRATEGIC FIT ──
+    st.markdown("""
+    <div class="section-divider">
+        <div class="section-divider-line"></div>
+        <div class="section-divider-label">E · Budget & Décision</div>
+        <div class="section-divider-line"></div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    q_budget = st.selectbox("Budget annuel alloué à la digitalisation & logiciels métiers ?", [
+        "Moins de 10 000 DH",
+        "10 000 – 50 000 DH",
+        "50 000 – 200 000 DH",
+        "200 000 – 500 000 DH",
+        "Plus de 500 000 DH",
+        "Pas encore de budget alloué",
+    ])
+
+    q_decision_maker = st.radio("Êtes-vous décisionnaire sur les achats technologiques ?", [
+        "Oui, décision finale",
+        "Je suis prescripteur (influence la décision)",
+        "Non, ce n'est pas mon périmètre",
+    ])
+
+    q_barrier = st.selectbox("Principal frein à l'adoption de nouvelles technologies dans votre entreprise ?", [
+        "Coût d'acquisition perçu comme élevé",
+        "Complexité d'utilisation / manque de formation",
+        "Temps de mise en place et d'intégration",
+        "Résistance au changement des équipes",
+        "Manque de cas d'usage concrets et prouvés au Maroc",
+        "Défiance envers les données et la confidentialité",
+        "Pas de frein majeur identifié",
+    ])
+
+    q_timeline = st.selectbox("Dans quel délai envisagez-vous un investissement en automatisation/IA ?", [
+        "Immédiatement — nous cherchons une solution",
+        "Dans les 3 prochains mois",
+        "Dans les 6 prochains mois",
+        "Dans l'année",
+        "Pas de projet concret pour l'instant",
+    ])
+
+    # ── BLOCK G : INTEREST & NEXT STEP ──
+    st.markdown("""
+    <div class="section-divider">
+        <div class="section-divider-line"></div>
+        <div class="section-divider-label">F · Intérêt & Prochaine étape</div>
+        <div class="section-divider-line"></div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    q_cps_ai = st.radio("Seriez-vous intéressé par une IA qui lit le CPS à votre place et extrait le Dossier Technique ?", [
+        "Pas intéressé pour l'instant",
+        "Oui, si c'est gratuit ou en essai",
+        "Oui, prêt à payer un abonnement mensuel",
+        "Oui, et je voudrais être contacté pour une démo",
+    ])
+
+    q_pilot = st.radio("Seriez-vous ouvert à tester une automatisation sur-mesure (Proof of Concept) gratuitement ?", [
+        "Oui, absolument",
+        "Peut-être — à voir selon la proposition",
+        "Non, pas pour le moment",
+    ])
+
+    q_source = st.selectbox("Comment avez-vous entendu parler de ce service ?", [
+        "LinkedIn", "Recommandation d'un contact",
+        "Google / Recherche web", "Email reçu",
+        "Événement ou salon professionnel", "Autre",
+    ])
+
+    q_comment = st.text_area(
+        "Un commentaire libre, une question, ou une idée d'automatisation que vous souhaitez explorer ? (optionnel)",
+        placeholder="Toute remarque est précieuse — nous lisons chaque réponse.",
+        height=80,
+    )
+
+    submitted = st.form_submit_button(
+        "✦  Activer mes alertes AO personnalisées",
+        use_container_width=True
+    )
+
+# --- 7. VALIDATION & SUBMISSION ---
 if submitted:
     company_clean = company_name.strip().lower()
-    
-    # Vérification des champs obligatoires
-    if not company_name or not secteur_entreprise or not email or not phone or not tags or not q10_automate_task:
-        st.error("⚠️ Veuillez remplir tous les champs obligatoires (*).")
-        
-    # Vérification anti-spam pour le nom de l'entreprise
+
+    if not all([company_name, secteur_entreprise, email, phone, tags, q_dream_automation]):
+        st.error("⚠️ Veuillez remplir tous les champs marqués d'un astérisque (*).")
+
     elif company_clean in FORBIDDEN_NAMES or len(company_clean) < 2:
-        st.error("❌ Veuillez entrer un nom d'entreprise valide. Les mentions anonymes, particuliers ou génériques ne sont pas acceptées pour ce service B2B.")
-        
+        st.error("❌ Veuillez entrer un nom d'entreprise valide. Ce service est réservé aux structures B2B identifiées.")
+
+    elif "@" not in email or "." not in email.split("@")[-1]:
+        st.error("❌ L'adresse email semble invalide. Veuillez vérifier.")
+
     else:
         try:
-            with st.spinner('Vérification de l\'entreprise et enregistrement des préférences...'):
-                current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                secteurs_ao_str = ", ".join(tags)
-                site_web = website if website else "Non renseigné"
-                
-                # 18 colonnes pour Google Sheets
-                row_to_insert =[
-                    current_time, 
-                    company_name, 
-                    secteur_entreprise,
-                    site_web,          # <- NOUVELLE COLONNE
-                    city, 
-                    email, 
-                    phone,             # <- MAINTENANT OBLIGATOIRE
-                    secteurs_ao_str, 
-                    q1_usage, 
-                    q2_lowcode, 
-                    q3_problem,
-                    q4_time_lost,
-                    q5_budget,
-                    q6_barrier,
-                    q7_ao_management,
-                    q8_premium_interest,
-                    q9_pilot,
-                    q10_automate_task
+            with st.spinner("Enregistrement en cours…"):
+                current_time       = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                secteurs_ao_str    = ", ".join(tags)
+                regions_str        = ", ".join(ao_regions) if ao_regions else "Toutes régions"
+                ai_tools_str       = ", ".join(q_ai_tools) if q_ai_tools else "Aucun"
+                digital_tools_str  = ", ".join(q_digital_tools) if q_digital_tools else "Aucun"
+                site_web           = website if website else "Non renseigné"
+                comment_clean      = q_comment if q_comment else "—"
+
+                row_to_insert = [
+                    current_time, company_name, secteur_entreprise, ca_range,
+                    age_entreprise, effectif, role_respondant,
+                    site_web, city, email, phone,
+                    secteurs_ao_str, regions_str,
+                    # AO Process
+                    q_ao_freq, q_ao_management, q_ao_time, q_ao_pain, q_ao_win_rate,
+                    # AI Maturity
+                    q_ai_usage, ai_tools_str, q_lowcode, q_data_infra, digital_tools_str,
+                    # Pain points
+                    q_top_pain, q_time_lost, q_priority_dept, q_existing_automation, q_dream_automation,
+                    # Budget & decision
+                    q_budget, q_decision_maker, q_barrier, q_timeline,
+                    # Interest
+                    q_cps_ai, q_pilot, q_source, comment_clean,
                 ]
-                
+
                 gc = init_google_sheets()
                 sheet = gc.open(GOOGLE_SHEET_NAME).sheet1
                 sheet.append_row(row_to_insert)
 
-            st.success("✅ Inscription validée ! Votre entreprise recevra ses premiers Appels d'Offres ciblés prochainement.")
+            st.success("✅ Inscription validée ! Vous recevrez vos premiers Appels d'Offres ciblés prochainement.")
             st.balloons()
-            
+
         except Exception as e:
-            st.error(f"Une erreur est survenue lors de l'enregistrement. Veuillez réessayer. Détails techniques : {e}")
+            st.error(f"Une erreur est survenue lors de l'enregistrement. Réessayez ou contactez-nous. Détails : {e}")
+
+# --- 8. FOOTER ---
+st.markdown("""
+<div class="footer-note">
+    Données traitées de façon confidentielle — aucune revente à des tiers.<br>
+    Un service <strong>TargetUp Group</strong> · Maroc 🇲🇦
+</div>
+""", unsafe_allow_html=True)
